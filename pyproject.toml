@@ -1,0 +1,30 @@
+# path: pyproject.toml
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "odin"
+version = "0.0.1"
+description = "ODIN: HTTP for AI – minimal scaffold"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "orjson>=3.9",
+  "httpx>=0.27",
+  "pydantic>=2.7",
+  "blake3>=1.0",
+  "cbor2>=5.6",
+  "prometheus-client>=0.20",
+]
+
+# This root package is a meta project for dev tooling and dependencies only.
+# Avoid setuptools auto-discovery across multiple top-level dirs (apps, libs).
+[tool.setuptools]
+packages = []
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["."]
+testpaths = ["tests", "apps", "libs"]

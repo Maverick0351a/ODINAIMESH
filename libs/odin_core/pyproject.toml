@@ -1,0 +1,34 @@
+# path: libs/odin_core/pyproject.toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "odin-core"
+version = "0.1.0"
+description = "ODIN core library for deterministic AI-to-AI messaging (OML, OPE, CID)."
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "ODIN Project"}
+]
+dependencies = [
+  "cbor2>=5.6.0",
+  "blake3>=0.4.1",
+  "cryptography>=41.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=7.0.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+filterwarnings = [
+  "ignore::DeprecationWarning"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["odin*"]

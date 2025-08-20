@@ -1,0 +1,56 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+coverage/
+htmlcov/
+*.egg-info/
+*.egg
+*.whl
+build/
+dist/
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# Node/JS
+node_modules/
+packages/*/node_modules/
+.npm/
+.yarn/
+.pnpm-store/
+.turbo/
+.nyc_output/
+
+# Logs & temp
+*.log
+logs/
+tmp/
+tmp-*/
+tmp-npm-smoke/
+tmp/npm-test/
+tmp/odin/
+.cache/
+
+# Project-specific artifacts
+odin.egg-info/
+
+# Docker/Cloud ignore metadata are tracked
+# (keep these files in repo for reproducible builds)
+

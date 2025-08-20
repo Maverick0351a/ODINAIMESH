@@ -1,0 +1,40 @@
+image:
+  repo: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}
+  tag: ${IMAGE_TAG}
+
+gateway:
+  enabled: true
+  name: odin-gateway
+  port: 8080
+  env:
+    ODIN_STORAGE: firestore
+    JWKS_CACHE_TTL: 300
+    ROTATION_GRACE_SEC: 600
+  secrets:
+    # If set, create a secret named "odin-secrets" with key "ODIN_ADMIN_KEY", or override below as name/key.
+    ODIN_ADMIN_KEY: ""
+  resources: {}
+
+relay:
+  enabled: true
+  name: odin-relay
+  port: 8080
+  env:
+    ODIN_STORAGE: firestore
+    ODIN_RELAY_RATE_LIMIT_QPS: 20
+  resources: {}
+
+autoscaling:
+  gateway:
+    min: 2
+    max: 10
+    cpu: 60
+  relay:
+    min: 2
+    max: 10
+    cpu: 60
+
+monitoring:
+  enabled: true
+  scrape: true
+  interval: 30s

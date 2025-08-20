@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  PROJECT_ID: odin-producer
+  REGION: us-central1
+  AR_BASE: us-central1-docker.pkg.dev/odin-producer/odin
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Auth (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Configure Artifact Registry Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build & push gateway
+        run: |
+          G_TAG="${{ env.AR_BASE }}/gateway:${{ github.ref_name }}"
+          echo "Building $G_TAG"
+          docker build -t "$G_TAG" -f Dockerfile .
+          docker push "$G_TAG"
+
+      - name: Build & push relay
+        run: |
+          R_TAG="${{ env.AR_BASE }}/relay:${{ github.ref_name }}"
+          echo "Building $R_TAG"
+          gcloud builds submit --config cloudbuild.relay.yaml --substitutions _TAG="$R_TAG" .
+
+      - name: Deploy odin-gateway
+        run: |
+          G_TAG="${{ env.AR_BASE }}/gateway:${{ github.ref_name }}"
+          gcloud run deploy odin-gateway \
+            --project=${{ env.PROJECT_ID }} --region=${{ env.REGION }} --image="$G_TAG" --platform=managed \
+            --allow-unauthenticated --min-instances=1 \
+            --update-env-vars="ODIN_STORAGE=firestore,JWKS_CACHE_TTL=300,ROTATION_GRACE_SEC=600" --quiet
+
+      - name: Deploy odin-relay
+        run: |
+          R_TAG="${{ env.AR_BASE }}/relay:${{ github.ref_name }}"
+          gcloud run deploy odin-relay \
+            --project=${{ env.PROJECT_ID }} --region=${{ env.REGION }} --image="$R_TAG" --platform=managed \
+            --allow-unauthenticated --min-instances=1 \
+            --update-env-vars="ODIN_STORAGE=firestore,ODIN_RELAY_RATE_LIMIT_QPS=20" --quiet

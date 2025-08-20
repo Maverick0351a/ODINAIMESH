@@ -1,0 +1,16 @@
+{{- if and .Values.monitoring.enabled .Values.monitoring.scrape }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "odin.name" . }}
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "odin.name" . }}
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: {{ .Values.monitoring.interval }}
+{{- end }}

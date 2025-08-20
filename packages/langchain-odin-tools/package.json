@@ -1,0 +1,24 @@
+{
+  "name": "langchain-odin-tools",
+  "version": "0.0.1-alpha.1",
+  "description": "LangChain tools wrapping ODIN Gateway endpoints (echo, translate, mesh forward).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build",
+    "test": "node --test || echo no-tests"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.10",
+    "odin-protocol-sdk": "alpha",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.11.0"
+  }
+}

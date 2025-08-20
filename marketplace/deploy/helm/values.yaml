@@ -10,9 +10,12 @@ gateway:
     ODIN_STORAGE: firestore
     JWKS_CACHE_TTL: 300
     ROTATION_GRACE_SEC: 600
+  ODIN_OTEL: "1"
+  ODIN_OTEL_EXPORTER: gcp
   secrets:
     # If set, create a secret named "odin-secrets" with key "ODIN_ADMIN_KEY", or override below as name/key.
     ODIN_ADMIN_KEY: ""
+  ODIN_KEYSTORE_JSON: ""
   resources: {}
 
 relay:
@@ -22,6 +25,8 @@ relay:
   env:
     ODIN_STORAGE: firestore
     ODIN_RELAY_RATE_LIMIT_QPS: 20
+  ODIN_OTEL: "1"
+  ODIN_OTEL_EXPORTER: gcp
   resources: {}
 
 autoscaling:

@@ -1,0 +1,8 @@
+{
+  "from_sft": "test/A@1",
+  "to_sft":   "test/B@1",
+  "fields": { "user_name": "name" },
+  "intents": { "greet": "say_hello" },
+  "const":   { "version": "1" },
+  "drop":    [ "debug" ]
+}

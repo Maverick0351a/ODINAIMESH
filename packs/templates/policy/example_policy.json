@@ -1,0 +1,10 @@
+{
+    "//": "This is an example policy file. Policies are defined in JSON format.",
+    "rules": [
+        {
+            "effect": "allow",
+            "action": "*",
+            "resource": "*"
+        }
+    ]
+}

@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "odin-core"
 version = "0.1.0"
-description = "ODIN core library for deterministic AI-to-AI messaging (OML, OPE, CID)."
+description = "ODIN Protocol — Core library for verifiable AI-to-AI messaging (OML-C, OPE, CID)."
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
@@ -16,7 +16,19 @@ dependencies = [
   "cbor2>=5.6.0",
   "blake3>=0.4.1",
   "cryptography>=41.0.0",
+  "httpx>=0.27",
 ]
+
+# PEP 621 keywords field
+keywords = ["odin", "ai", "protocol", "oml", "cbor", "dag", "cid", "ed25519", "proofs"]
+
+
+[project.urls]
+Homepage = "https://github.com/"  # update with repo URL if available
+Documentation = "https://github.com/"  # update when published
+
+[project.scripts]
+odin-verify = "odin.verify:_cli"
 
 [project.optional-dependencies]
 test = [
@@ -31,4 +43,4 @@ filterwarnings = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["odin*"]
+include = ["odin*", "odin_core*"]

@@ -1,0 +1,8 @@
+{
+  "from_sft": "beta@v1",
+  "to_sft": "odin.task@v1",
+  "intents": { "beta.reply": "odin.task.reply" },
+  "fields": { "success": "ok", "output": "result" },
+  "const": {},
+  "drop": []
+}

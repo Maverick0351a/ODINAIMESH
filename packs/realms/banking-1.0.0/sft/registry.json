@@ -1,0 +1,10 @@
+{
+    "functions": [
+        {
+            "name": "invoice_to_iso20022_transform",
+            "description": "Transforms an invoice to an ISO 20022 payment initiation message.",
+            "entrypoint": "my_transforms.invoice_to_iso20022",
+            "runtime": "python"
+        }
+    ]
+}

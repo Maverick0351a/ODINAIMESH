@@ -1,0 +1,16 @@
+{
+  "from_sft": "beta@v1",
+  "to_sft": "alpha@v1",
+  "intents": {
+    "beta.request": "alpha.ask",
+    "beta.reply": "alpha.result"
+  },
+  "fields": {
+    "prompt": "ask",
+    "why": "reason",
+    "output": "answer",
+    "success": "ok"
+  },
+  "const": {},
+  "drop": []
+}

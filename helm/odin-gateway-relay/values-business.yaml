@@ -1,0 +1,33 @@
+# Business Realm Configuration
+replicaCount: 1
+
+image:
+  repository: gcr.io/valued-lambda-469623-b4/odin-gateway
+  tag: latest
+
+env:
+  ODIN_REALM_PACK_URI: "gs://valued-lambda-469623-b4-business-pack/packs/business"
+  ODIN_ENFORCE_ROUTES: "/v1/envelope"
+  ODIN_HTTP_SIGN_ENFORCE_ROUTES: "/v1/envelope"
+  ODIN_SIGN_ROUTES: "/v1/envelope"
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+minReplicas: 1
+maxReplicas: 3
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+cloudrun:
+  annotations:
+    "run.googleapis.com/client-name": "odin-gateway-business"

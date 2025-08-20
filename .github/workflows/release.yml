@@ -53,13 +53,16 @@ jobs:
           G_TAG="${{ env.AR_BASE }}/gateway:${{ github.ref_name }}"
           gcloud run deploy odin-gateway \
             --project=${{ env.PROJECT_ID }} --region=${{ env.REGION }} --image="$G_TAG" --platform=managed \
-            --allow-unauthenticated --min-instances=1 \
-            --update-env-vars="ODIN_STORAGE=firestore,JWKS_CACHE_TTL=300,ROTATION_GRACE_SEC=600" --quiet
+            --no-allow-unauthenticated --min-instances=1 \
+            --update-env-vars="ODIN_STORAGE=firestore,JWKS_CACHE_TTL=300,ROTATION_GRACE_SEC=600,ODIN_OTEL=1,ODIN_OTEL_EXPORTER=gcp" \
+            --update-secrets="ODIN_ADMIN_KEY=odin-admin-key:latest,ODIN_ADMIN_TOKEN=odin-admin-key:latest,ODIN_KEYSTORE_JSON=odin-keystore:latest" \
+            --quiet
 
       - name: Deploy odin-relay
         run: |
           R_TAG="${{ env.AR_BASE }}/relay:${{ github.ref_name }}"
           gcloud run deploy odin-relay \
             --project=${{ env.PROJECT_ID }} --region=${{ env.REGION }} --image="$R_TAG" --platform=managed \
-            --allow-unauthenticated --min-instances=1 \
-            --update-env-vars="ODIN_STORAGE=firestore,ODIN_RELAY_RATE_LIMIT_QPS=20" --quiet
+            --no-allow-unauthenticated --min-instances=1 \
+            --update-env-vars="ODIN_STORAGE=firestore,ODIN_RELAY_RATE_LIMIT_QPS=20,ODIN_OTEL=1,ODIN_OTEL_EXPORTER=gcp" \
+            --quiet

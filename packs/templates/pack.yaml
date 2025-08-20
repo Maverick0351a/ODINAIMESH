@@ -1,0 +1,35 @@
+# Realm Pack Template
+# Defines a set of configurations for a specific realm.
+
+# The name of the realm.
+realm_name: "my-realm"
+
+# A description of the realm.
+description: "A template for creating new realms."
+
+
+# The version of the ODIN Core this pack is compatible with.
+# Supports semver ranges.
+core_range: ">=0.1.0 <1.0.0"
+
+# Egress allowlist: regex patterns for allowed outbound URLs (for dev/test, allow all)
+egress_allowlist:
+  - ".*"
+
+# Defines the policy files for the realm.
+policy:
+  # A list of policy files to apply.
+  # Paths are relative to the policy/ directory.
+  files:
+    - "example_policy.json"
+
+# Defines the Secure Function Transformation (SFT) settings.
+sft:
+  # The path to the SFT registry file.
+  # Path is relative to the sft/ directory.
+  registry: "registry.json"
+
+  # A list of SFT map files.
+  # Paths are relative to the sft/maps/ directory.
+  maps:
+    - "example_map.json"

@@ -1,6 +1,13 @@
 pyproject.toml
 odin/__init__.py
+odin/cid.py
+odin/constants.py
+odin/jsonutil.py
+odin/jwks.py
+odin/middleware.py
 odin/ope.py
+odin/verifier.py
+odin/verify.py
 odin/crypto/blake3_hash.py
 odin/oml/__init__.py
 odin/oml/encoder.py
@@ -9,7 +16,12 @@ odin/security/keystore.py
 odin_core.egg-info/PKG-INFO
 odin_core.egg-info/SOURCES.txt
 odin_core.egg-info/dependency_links.txt
+odin_core.egg-info/entry_points.txt
 odin_core.egg-info/requires.txt
 odin_core.egg-info/top_level.txt
+tests/test_jsonutil.py
 tests/test_oml_encoder.py
 tests/test_ope.py
+tests/test_ope_integration.py
+tests/test_verifier.py
+tests/test_verify_cli.py

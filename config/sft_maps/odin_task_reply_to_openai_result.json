@@ -1,0 +1,8 @@
+{
+  "from_sft": "odin.task@v1",
+  "to_sft": "openai.tool@v1",
+  "intents": { "odin.task.reply": "openai.tool.result" },
+  "fields": { "ok": "ok", "result": "content" },
+  "const": {},
+  "drop": []
+}

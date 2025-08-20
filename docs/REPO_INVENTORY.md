@@ -1,0 +1,490 @@
+﻿# Repository Inventory
+
+Root: C:/Users/Maver/ODINMESH51/ODINAIMESH
+Branch: feature/marketplace-producer-pack
+Commit: 36edc0ec563ca3ce57823a5d1eeb2028ce049b0d
+Remote: https://github.com/Maverick0351a/ODINAIMESH
+
+## Top-level structure
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.git/ (144 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.github/ (3 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.pytest_cache/ (5 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.ruff_cache/ (3 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv/ (5248 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.vscode/ (3 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps/ (154 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\billing/ (9 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\build/ (0 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\config/ (18 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\docs/ (2 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\gateway/ (5 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\helm/ (2 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs/ (128 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace/ (16 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\odin.egg-info/ (5 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages/ (5158 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\scripts/ (17 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks/ (528 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services/ (3 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tests/ (4 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp/ (11777 files)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke/ (2430 files)
+
+## Workflows
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.github\workflows\release.yml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.github\workflows\wif-auth-check.yml
+
+## Containers & Deployment (Dockerfiles)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\Dockerfile
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\Dockerfile.agent-beta
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\agent_beta\Dockerfile
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services\relay\Dockerfile
+
+## Key Manifests
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\requirements.txt
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\pyproject.toml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\pyproject.toml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\python\pyproject.toml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@cfworker\json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@cfworker\json-schema\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@cfworker\json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@langchain\core\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@noble\ed25519\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@types\node\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@types\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\@types\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\base64-js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\camelcase\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\chalk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\chalk\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\color-convert\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\color-name\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\console-table-printer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\decamelize\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\eventemitter3\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\has-flag\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\js-tiktoken\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\langsmith\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\mustache\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\odin-protocol-sdk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\p-finally\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\p-queue\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\p-retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\p-timeout\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\semver\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\simple-wcswidth\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\supports-color\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\typescript\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\undici-types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\zod\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\zod-to-json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\zod-to-json-schema\dist\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\langchain-odin-tools\node_modules\zod-to-json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@ampproject\remapping\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@babel\helper-string-parser\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@babel\helper-validator-identifier\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@babel\parser\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@babel\types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@bcoe\v8-coverage\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@bcoe\v8-coverage\dist\lib\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@esbuild\win32-x64\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@isaacs\cliui\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@istanbuljs\schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@jridgewell\gen-mapping\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@jridgewell\resolve-uri\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@jridgewell\sourcemap-codec\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@jridgewell\trace-mapping\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@pkgjs\parseargs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@rollup\rollup-win32-x64-msvc\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@scure\base\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@scure\base\lib\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@types\estree\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@types\node\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\coverage-v8\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\expect\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\mocker\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\pretty-format\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\runner\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\snapshot\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\spy\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\@vitest\utils\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\ansi-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\assertion-error\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\balanced-match\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\brace-expansion\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\cac\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\chai\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\check-error\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\color-convert\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\color-name\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\cross-spawn\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\debug\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\deep-eql\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\eastasianwidth\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\emoji-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\es-module-lexer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\esbuild\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\estree-walker\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\expect-type\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\foreground-child\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\foreground-child\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\foreground-child\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\glob\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\glob\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\glob\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\has-flag\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\html-escaper\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\html-escaper\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\html-escaper\test\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\is-fullwidth-code-point\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\isexe\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\istanbul-lib-coverage\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\istanbul-lib-report\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\istanbul-lib-source-maps\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\istanbul-reports\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\jackspeak\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\jackspeak\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\jackspeak\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\loupe\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\lru-cache\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\lru-cache\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\lru-cache\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\magic-string\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\magicast\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\make-dir\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minimatch\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minimatch\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minimatch\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minipass\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minipass\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\minipass\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\ms\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\nanoid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\nanoid\async\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\nanoid\non-secure\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\nanoid\url-alphabet\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\package-json-from-dist\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\package-json-from-dist\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\package-json-from-dist\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\path-key\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\path-scurry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\path-scurry\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\path-scurry\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\pathe\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\pathval\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\picocolors\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\postcss\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\rimraf\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\rimraf\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\rimraf\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\rollup\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\rollup\dist\es\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\semver\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\shebang-command\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\shebang-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\siginfo\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\signal-exit\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\signal-exit\dist\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\signal-exit\dist\mjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\source-map-js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\stackback\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\std-env\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\string-width\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\string-width-cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\string-width-cjs\node_modules\ansi-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\string-width-cjs\node_modules\emoji-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\string-width-cjs\node_modules\strip-ansi\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\strip-ansi\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\strip-ansi-cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\strip-ansi-cjs\node_modules\ansi-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\supports-color\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\test-exclude\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tinybench\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tinyexec\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tinypool\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tinyrainbow\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tinyspy\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\tweetnacl\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\typescript\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\undici-types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\vite\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\vite\types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\vite-node\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\vitest\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\which\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\why-is-node-running\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\node_modules\ansi-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\node_modules\emoji-regex\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\node_modules\string-width\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\packages\sdk\node_modules\wrap-ansi-cjs\node_modules\strip-ansi\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\@noble\ed25519\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\@types\node\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\typescript\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\sdks\js\node_modules\undici-types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@cfworker\json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@cfworker\json-schema\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@cfworker\json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@langchain\core\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@langchain\openai\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@langchain\textsplitters\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@noble\ed25519\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@types\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\@types\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\argparse\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\base64-js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\camelcase\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\chalk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\chalk\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\color-convert\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\color-name\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\console-table-printer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\decamelize\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\eventemitter3\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\has-flag\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\js-tiktoken\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\js-yaml\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\jsonpointer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\langchain\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\langsmith\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\mustache\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\odin-protocol-sdk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\openai\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\openapi-types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\p-finally\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\p-queue\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\p-retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\p-timeout\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\semver\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\simple-wcswidth\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\supports-color\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\yaml\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\yaml\browser\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\zod\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\zod-to-json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\zod-to-json-schema\dist\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\langchain-js-odin\node_modules\zod-to-json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\node_modules\@noble\ed25519\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\node_modules\odin-protocol-sdk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@cfworker\json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@cfworker\json-schema\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@cfworker\json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@langchain\core\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@langchain\openai\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@langchain\textsplitters\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@types\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\@types\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\argparse\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\base64-js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\camelcase\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\chalk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\chalk\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\color-convert\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\color-name\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\console-table-printer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\decamelize\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\eventemitter3\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\has-flag\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\js-tiktoken\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\js-yaml\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\jsonpointer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\langchain\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\langsmith\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\mustache\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\openai\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\openapi-types\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\p-finally\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\p-queue\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\p-retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\p-timeout\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\semver\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\simple-wcswidth\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\supports-color\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\yaml\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\yaml\browser\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\zod\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\zod-to-json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\zod-to-json-schema\dist\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp\npm-test\tmp\langchain-js-echo\node_modules\zod-to-json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@cfworker\json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@cfworker\json-schema\dist\commonjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@cfworker\json-schema\dist\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@langchain\core\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@noble\ed25519\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@noble\hashes\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@noble\hashes\esm\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@types\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\@types\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\base64-js\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\camelcase\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\chalk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\chalk\node_modules\ansi-styles\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\color-convert\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\color-name\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\console-table-printer\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\decamelize\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\eventemitter3\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\has-flag\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\js-tiktoken\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\langchain-odin-tools\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\langsmith\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\mustache\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\odin-protocol-sdk\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\p-finally\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\p-queue\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\p-retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\p-timeout\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\retry\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\semver\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\simple-wcswidth\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\supports-color\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\uuid\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\zod\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\zod-to-json-schema\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\zod-to-json-schema\dist\cjs\package.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\tmp-npm-smoke\node_modules\zod-to-json-schema\dist\esm\package.json
+
+## Code Entrypoints (detected)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\pydantic\_internal\_validators.py:79 â€” """Inspired by uvicorn — dotted paths should include a colon before the final item if that item is not a module.
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\lifespan\off.py:5 â€” from uvicorn import Config
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\lifespan\on.py:8 â€” from uvicorn import Config
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\lifespan\on.py:9 â€” from uvicorn._types import (
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\lifespan\on.py:37 â€” self.logger = logging.getLogger("uvicorn.error")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\lifespan\on.py:53 â€” # See https://github.com/encode/uvicorn/pull/972
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\loops\asyncio.py:5 â€” logger = logging.getLogger("uvicorn.error")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\loops\auto.py:5 â€” from uvicorn.loops.asyncio import asyncio_setup as loop_setup
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\loops\auto.py:9 â€” from uvicorn.loops.uvloop import uvloop_setup
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\middleware\asgi2.py:1 â€” from uvicorn._types import (
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\middleware\message_logger.py:4 â€” from uvicorn._types import (
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\uvicorn\middleware\message_logger.py:12 â€” from uvicorn.logging import TRACE_LOG_LEVEL
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\api_key.py:44 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\api_key.py:136 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\api_key.py:224 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\http.py:119 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\http.py:239 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\http.py:343 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\oauth2.py:38 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\security\oauth2.py:180 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\applications.py:48 â€” class FastAPI(Starlette):
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\applications.py:60 â€” app = FastAPI()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\applications.py:117 â€” app = FastAPI(title="ChimichangApp")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\fastapi\applications.py:138 â€” app = FastAPI(summary="Deadpond's favorite app. Nuff said.")
+
+## Endpoints (detected)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:17 â€” r = c.get("/.well-known/odin/discovery.json")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:44 â€” r = c.get("/.well-known/odin/discovery.json")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:48 â€” assert body["endpoints"]["discovery"] == "/.well-known/odin/discovery.json"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:53 â€” r = c.get("/.well-known/odin/discovery.json")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_registry.py:66 â€” d = c.get("/.well-known/odin/discovery.json")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:60 â€” @router.get("/.well-known/odin/discovery.json")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:172 â€” "discovery": "/.well-known/odin/discovery.json",
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\odin\discovery.py:9 â€” DISCOVERY_PATH = "/.well-known/odin/discovery.json"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\tests\test_discovery_client.py:11 â€” assert discovery_url("http://x") == "http://x/.well-known/odin/discovery.json"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\tests\test_discovery_client.py:12 â€” assert discovery_url("http://x/") == "http://x/.well-known/odin/discovery.json"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\tests\test_discovery_client.py:25 â€” if request.method == "GET" and request.url.path.endswith("/.well-known/odin/discovery.json"):
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\libs\odin_core\tests\test_discovery_client.py:57 â€” if request.url.path.endswith("/.well-known/odin/discovery.json"):
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\prometheus_client\exposition.py:139 â€” # constrained to the documented /metrics, but any path is allowed.
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\.venv\Lib\site-packages\prometheus_client\exposition.py:632 â€” url = '{}/metrics/{}/{}'.format(gateway, *_escape_grouping_key("job", job))
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\agent_beta\tests\test_agent_beta_metrics.py:12 â€” m = client.get("/metrics").text
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\agent_beta\tests\test_agent_beta_signature_metrics.py:49 â€” m = client.get("/metrics").text
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\agent_beta\api.py:31 â€” @app.get("/metrics")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\middleware\response_signing.py:236 â€” if path.startswith("/metrics"):
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\odin_gateway\api_gateway.py:42 â€” @app.get("/metrics")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_metrics_observability.py:35 â€” metrics = client.get("/metrics").text
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_middleware.py:69 â€” # For /metrics which is not JSON (text/plain), no signing headers expected even if prefix matches
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_middleware.py:71 â€” "ODIN_SIGN_ROUTES": "/metrics",
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_middleware.py:79 â€” r = client.get("/metrics")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\api.py:217 â€” @app.get("/metrics")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:12 â€” monkeypatch.setenv("ODIN_ENFORCE_ROUTES", "/v1/envelope,/v1/secured")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_discovery.py:33 â€” assert "/v1/envelope" in pol["enforce_routes"]
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:41 â€” # We only exercise /v1/envelope for now
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:42 â€” assert url.endswith("/v1/envelope")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:43 â€” r = clientB.post("/v1/envelope", json=json)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:53 â€” # Call mesh forward on A → B:/v1/envelope
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:54 â€” body = {"target_url": "http://routerB/v1/envelope", "payload": {"hello": "world"}}
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:74 â€” assert rec["to_url"] == "http://routerB/v1/envelope"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:97 â€” r = clientB.post("/v1/envelope", json=json)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:106 â€” json={"target_url": "http://routerB/v1/envelope", "payload": {"hello": "mesh"}},
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_proof_enforcement_middleware.py:21 â€” # Enable middleware for /v1/envelope route strictly
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_proof_enforcement_middleware.py:22 â€” monkeypatch.setenv("ODIN_ENFORCE_ROUTES", "/v1/envelope")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\middleware\response_signing.py:203 â€” sft_pref = os.getenv(ENV_SFT_VALIDATE_ROUTES, "/v1/translate").strip()
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\odin_gateway\translate.py:59 â€” @router.post("/v1/translate")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_admin_reload.py:68 â€” t = client.post("/v1/translate", json=body)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_proof_discovery_middleware.py:14 â€” r = c.post("/v1/translate", json={"content": "hi", "target_lang": "en"})
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_receipts_endpoint.py:11 â€” r = c.post("/v1/translate", json={"content": "hello", "target_lang": "en"})
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_sft.py:19 â€” @app.post("/v1/translate")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_sft.py:44 â€” r = c.post("/v1/translate", json=payload)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_sft.py:51 â€” # Enable pre-sign SFT validation for /v1/translate
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_sft.py:52 â€” monkeypatch.setenv("ODIN_SFT_VALIDATE_ROUTES", "/v1/translate")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_response_signing_sft.py:58 â€” r = c.post("/v1/translate", json=bad)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_reverse_and_bridge_reply_receipts.py:9 â€” Exercise the reverse transform path by calling /v1/translate with a Beta->Alpha map.
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_reverse_and_bridge_reply_receipts.py:23 â€” r = client.post("/v1/translate", json=body)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_cross_router.py:68 â€” assert href and href.startswith("/v1/receipts/hops/")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_mesh_redaction.py:27 â€” assert href and href.startswith("/v1/receipts/hops/")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\tests\test_receipt_chain_endpoints.py:35 â€” rl = c.get(f"/v1/receipts/hops", params={"trace_id": trace_id})
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:156 â€” "receipts_hop_get": "/v1/receipts/hops/{id}",
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:157 â€” "receipts_hops_list": "/v1/receipts/hops",
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:159 â€” "receipts_hops_chain_get": "/v1/receipts/hops/chain/{trace_id}",
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:31 â€” @router.get("/v1/receipts/hops/{hop_id}")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:68 â€” @router.get("/v1/receipts/hops")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:96 â€” url = storage.url_for(key) or f"/v1/receipts/hops/{hid}"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:141 â€” # Alias path to match discovery/clients expecting '/v1/receipts/hops/chain/{trace_id}'
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:142 â€” @router.get("/v1/receipts/hops/chain/{trace_id}")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\receipts.py:147 â€” # Keep this dynamic route last to avoid shadowing more specific '/v1/receipts/hops*' routes
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\middleware\http_sign_enforcement.py:33 â€” - ODIN_HTTP_SIGN_ENFORCE_ROUTES: comma-separated prefixes (/v1/relay,/v1/bridge)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\middleware\proof_enforcement.py:30 â€” ENV_ENFORCE_ROUTES = "ODIN_ENFORCE_ROUTES"        # comma-separated prefixes, e.g. "/v1/relay,/v1/secured"
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\middleware\proof_enforcement.py:80 â€” - ODIN_ENFORCE_ROUTES      comma-separated path prefixes (e.g. "/v1/relay,/v1/secured")
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\apps\gateway\discovery.py:77 â€” "relay": _route_exists(req, "/v1/relay"),
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services\relay\tests\test_relay_ssrf_and_headers.py:16 â€” r = c.post("/relay", json=payload)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services\relay\tests\test_relay_ssrf_and_headers.py:30 â€” r1 = c.post("/relay", json=payload)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services\relay\tests\test_relay_ssrf_and_headers.py:34 â€” r2 = c.post("/relay", json=payload)
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\services\relay\api.py:174 â€” @app.post("/relay")
+
+## Marketplace Pack
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\CLOUDRUN.md
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\MARKETPLACE.md
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\RUNBOOK.md
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\SLA.md
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\cloudrun\README.md
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\Chart.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\values.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\deployment-gateway.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\deployment-relay.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\deployment.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\hpa.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\service.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\deploy\helm\templates\servicemonitor.yaml
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\dashboards\odin-cloud-monitoring.json
+- C:\Users\Maver\ODINMESH51\ODINAIMESH\marketplace\dashboards\odin-gateway-relay.json
+
+Generated: 2025-08-20T05:57:39Z

@@ -1,0 +1,16 @@
+{
+    "rules": [
+        {
+            "effect": "deny",
+            "action": "*",
+            "resource": "*",
+            "conditions": {
+                "not": {
+                    "resource_tags": {
+                        "pci": "true"
+                    }
+                }
+            }
+        }
+    ]
+}

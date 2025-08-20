@@ -1,0 +1,10 @@
+steps:
+- id: "Build relay"
+  name: gcr.io/cloud-builders/docker
+  args: ["build","-f","services/relay/Dockerfile","-t","$_TAG","."]
+- id: "Push relay"
+  name: gcr.io/cloud-builders/docker
+  args: ["push","$_TAG"]
+
+images:
+- "$_TAG"

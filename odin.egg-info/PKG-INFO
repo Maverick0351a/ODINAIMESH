@@ -1,8 +1,12 @@
 Metadata-Version: 2.4
 Name: odin
 Version: 0.0.1
-Summary: ODIN: HTTP for AI – minimal scaffold
+Summary: ODIN Protocol — The Intranet for AI
+Project-URL: Homepage, https://github.com/
+Project-URL: Documentation, https://github.com/
+Keywords: odin,ai,intranet,protocol,proofs,cbor,dag,ed25519,cid,fastapi
 Requires-Python: >=3.10
+Description-Content-Type: text/markdown
 Requires-Dist: fastapi>=0.115
 Requires-Dist: uvicorn[standard]>=0.30
 Requires-Dist: orjson>=3.9
@@ -11,3 +15,190 @@ Requires-Dist: pydantic>=2.7
 Requires-Dist: blake3>=1.0
 Requires-Dist: cbor2>=5.6
 Requires-Dist: prometheus-client>=0.20
+Provides-Extra: gcp
+Requires-Dist: google-cloud-storage>=2.16.0; extra == "gcp"
+Requires-Dist: google-cloud-firestore>=2.16.0; extra == "gcp"
+Requires-Dist: google-cloud-secret-manager>=2.20.0; extra == "gcp"
+
+# ODIN Protocol
+
+The Intranet for AI
+
+ODIN is a verifiable communication layer for AI agents.
+Portable proofs, cryptographic receipts, and governed routing.
+
+- Like HTTP unlocked the web, ODIN unlocks a verifiable intranet for AI agents.
+- Portable, cryptographic, and open.
+- Separate from the human internet; governed only through ODIN Routers.
+- Enables trust, safety, and auditability at machine speed.
+
+## Architecture: ODIN Protocol — The Intranet for AI
+
+ODIN is a separate intranet for AI systems, distinct from the human internet. The two networks are intentionally isolated. The only governed crossing point is via ODIN Routers.
+
+ODIN Routers enforce:
+- Cryptographic verification — OPE signatures over exact OML-C bytes, bound to OML-CIDs
+- Policy and governance — HEL rules, rate limits, allow/deny lists, and agent identity checks
+- Translation/repair — when required to bridge formats, normalize messages, or recover from partial inputs
+
+Emphasis: AI-net and human-net must stay separate; routers are the only governed crossing point.
+
+### Network boundary overview
+
+```mermaid
+graph LR
+  subgraph Human_Internet[Human Internet]
+    H1[Browsers, Apps, APIs]
+  end
+
+  subgraph ODIN_Routers[ODIN Routers]
+    R1[Verify OPE over OML-CID]
+    R2[HEL Policy + Governance]
+    R3[Translate / Repair]
+  end
+
+  subgraph AI_Intranet_ODIN[AI Intranet (ODIN Protocol)]
+    A1[Agents]
+    A2[Services]
+    A3[Ledgers]
+  end
+
+  H1 --> R1
+  R1 --> R2
+  R2 --> R3
+  R3 --> A1
+  R3 --> A2
+  R3 --> A3
+```
+
+Notes:
+- All ingress/egress to the AI intranet passes through ODIN Routers.
+- Direct access from human internet to AI intranet resources is disallowed by design.
+
+## Features
+
+- FastAPI Gateway (reference ODIN Router component)
+  - GET /health — liveness probe
+  - GET /metrics — Prometheus metrics (odin_http_requests_total, odin_http_request_seconds)
+  - POST /v1/echo — tiny echo
+  - POST /v1/translate — builds an OML graph, persists DAG-CBOR (OML-C) to `tmp/oml/<cid>.cbor`, returns headers:
+    - `X-ODIN-OML-CID` — CID of the OML-C bytes
+    - `X-ODIN-OML-C-Path` — filesystem path of the persisted CBOR
+    - `X-ODIN-OPE` — base64 JSON OPE envelope
+    - `X-ODIN-OPE-KID` — key ID used to sign
+  - POST /v1/verify — verify OPE over inline bytes or a file path (optional OML CID binding)
+  - GET /v1/sft/default — expose default symbol table (JSON-hash + CBOR CID)
+  - POST /v1/ledger/append, GET /v1/ledger — append-only CID ledger stub
+  - OPE receipts persisted to `tmp/odin/receipts/<cid>.ope.json`
+  - GET /.well-known/odin/jwks.json — JWKS publication (inline env, file, or keystore)
+- Core library (`libs/odin_core/odin`)
+  - OML deterministic normalization, DAG-CBOR encoding, CID (BLAKE3-256 base32-lower, no padding)
+  - OPE (Ed25519) signing and verification over content bytes (+ optional OML CID)
+  - Keystore loaders (env vars or ODIN_KEYSTORE_JSON) with active_kid support
+  - JSON utilities: canonical JSON bytes (sorted keys + newline), safe parse helper
+- Tests: pytest sanity + unit tests for OML, OPE, gateway integration, and JSON utils
+
+## Quick start (Windows PowerShell)
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\pip.exe install -e .
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m uvicorn apps.gateway.api:app --host 127.0.0.1 --port 7070
+```
+
+Then:
+- Health: http://127.0.0.1:7070/health
+- Metrics: http://127.0.0.1:7070/metrics
+
+POST translate example:
+```json
+{
+  "text": "Hello",
+  "source_lang": "en",
+  "target_lang": "fr"
+}
+```
+
+The response includes the OML CID and proof headers; the CBOR is written under `tmp/oml/`.
+
+## SDK quick start
+
+Use the Python SDK client to post to ODIN endpoints and verify returned envelopes.
+
+Example (within this repo during development):
+
+1) Ensure the core library is on the path for imports when running ad‑hoc snippets.
+
+```powershell
+$env:PYTHONPATH = ".;libs/odin_core"  # one-time for current shell
+```
+
+2) Start the gateway (separate terminal):
+
+```powershell
+\.venv\Scripts\python.exe -m uvicorn apps.gateway.api:app --host 127.0.0.1 --port 7070
+```
+
+3) Call the envelope endpoint and verify:
+
+```python
+from odin import OdinHttpClient
+
+client = OdinHttpClient("http://127.0.0.1:7070")
+payload = {"text": "Hello", "source_lang": "en", "target_lang": "fr"}
+data, verification = client.post_envelope("/v1/envelope", payload)
+print("ok:", verification.ok, "cid:", verification.oml_cid)
+```
+
+### Auto-config via discovery
+
+```python
+from odin import OdinHttpClient
+
+# Point at your gateway; the client will fetch `/.well-known/odin/discovery.json`,
+# pick up JWKS, and default to sending `X-ODIN-Accept-Proof: embed,headers`.
+client = OdinHttpClient.from_discovery("http://127.0.0.1:7070", require_proof=True)
+```
+
+Notes:
+- Import from `odin` (the package exports `OdinHttpClient`) to avoid nested paths.
+- In packaged installs, `PYTHONPATH` is unnecessary; `pip install odin-core` will provide the `odin` package.
+
+## OPE signing keys
+
+The gateway loads a signing keypair via one of:
+
+- Direct env vars:
+  - `ODIN_SIGNING_KID`
+  - `ODIN_SIGNING_PRIVATE_KEY_B64` (base64url, no padding)
+  - `ODIN_SIGNING_PUBLIC_KEY_B64` (base64url, no padding)
+- Or a JSON keystore in `ODIN_KEYSTORE_JSON` with shape:
+  ```json
+  {"active_kid":"k1","keys":[{"kid":"k1","priv_b64":"...","pub_b64":"...","active":true}]}
+  ```
+
+If no keys are provided, an ephemeral keypair is generated (a warning is logged when `ODIN_DEBUG=1`).
+
+Persistent keystore:
+- Set `ODIN_KEYSTORE_PATH` to persist keys across restarts (default: `tmp/odin/keystore.json`).
+- `ensure_keystore_file()` will load/generate and rotate keys; the gateway signer prefers this file-backed keystore.
+
+JWKS publication options:
+- `ODIN_OPE_JWKS` — inline JWKS JSON string.
+- `ODIN_OPE_JWKS_PATH` — path to JWKS JSON file.
+- `ODIN_OPE_PUBKEY` + `ODIN_OPE_KID` — single Ed25519 pubkey (hex/base64/base64url) and kid.
+
+## Project layout
+
+- `apps/gateway/` — FastAPI gateway app and tests
+- `libs/odin_core/odin/` — core OML, OPE, keystore, and JSON utilities
+- `services/` — additional services
+  - `services/relay/` — ODIN Router component (relay) with SSRF defense, strict header allowlist, optional proof verification, and rate limiting; it’s the bridge between the human internet and the AI intranet.
+  - Env: `ODIN_RELAY_ALLOW_PRIVATE=1` to allow private hosts in dev; `ODIN_RELAY_RATE_LIMIT_QPS` to rate-limit requests.
+- `pyproject.toml` — dependencies and pytest discovery
+
+## Notes
+
+- OML files are deterministic and their CID is stable across runs for the same content.
+- Prometheus metrics are exposed from the same process; scrape `/metrics` to collect.

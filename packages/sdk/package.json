@@ -1,0 +1,43 @@
+{
+  "name": "@odin-protocol/sdk",
+  "version": "0.1.0",
+  "description": "ODIN Protocol — The Intranet for AI. JavaScript SDK for proof envelopes, JWKS, and verification.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf dist || true",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@noble/hashes": "^1.4.0",
+    "@scure/base": "^1.1.6",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-v8": "^2.1.9",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "keywords": [
+    "odin",
+    "odin-protocol",
+    "intranet-for-ai",
+    "jwks",
+    "ed25519",
+    "verification",
+    "proof",
+    "agents"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "from_sft": "openai.tool@v1",
+  "to_sft": "odin.task@v1",
+  "intents": { "openai.tool.call": "odin.task.request" },
+  "fields": { "tool_name": "task", "arguments": "args", "reason": "reason" },
+  "const": {},
+  "drop": []
+}

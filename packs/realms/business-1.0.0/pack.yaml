@@ -1,0 +1,20 @@
+realm_name: "business"
+version: "1.0.0"
+core_range: ">=1.0.0-rc1,<2.0.0"
+issuers: []
+jwks:
+  # In a real scenario, this would point to a well-known JWKS URL
+  # For now, we'll leave it empty and rely on the gateway's default.
+  url: ""
+data_classes: []
+rate_limits:
+  - tenant: "default"
+    qps: 10
+egress_allowlist:
+  - ".*"  # Allow all outbound URLs for dev/test
+policy:
+  files:
+    - "default.json"
+sft:
+  registry: "registry.json"
+  maps: []

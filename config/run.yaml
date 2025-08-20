@@ -1,0 +1,25 @@
+# Storage & Ledger
+ODIN_STORAGE_BACKEND: "gcs"
+ODIN_GCS_BUCKET: "odin-mesh-data"
+ODIN_GCS_PREFIX: "odin"
+
+ODIN_LEDGER_BACKEND: "firestore"
+ODIN_FIRESTORE_COLLECTION: "odin_ledger"
+
+# Transform receipts
+ODIN_TRANSFORM_RECEIPTS: "1"
+
+# Proof enforcement + response signing
+ODIN_ENFORCE_ROUTES: "/v1/translate,/v1/bridge"
+ODIN_SIGN_ROUTES: "/v1/envelope,/v1/translate"
+ODIN_SIGN_EMBED: "1"
+
+# HTTP request-signing (router→agent, bridge, etc.)
+ODIN_HTTP_SIGN_ENFORCE_ROUTES: "/v1/relay,/v1/bridge"
+ODIN_HTTP_SIGN_REQUIRE: "1"
+# Set both names to be safe (some builds read ODIN_HTTP_SIGN_SKEW)
+ODIN_HTTP_SIGN_SKEW_SEC: "300"
+ODIN_HTTP_SIGN_SKEW: "300"
+
+# Beta service URL (already resolved in your session)
+ODIN_BETA_TASK_URL: "https://agent-beta-pj7f5wjvua-uc.a.run.app/task"

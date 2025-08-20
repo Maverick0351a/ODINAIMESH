@@ -1,0 +1,5 @@
+{
+    "from_sft": "invoice",
+    "to_sft": "iso20022",
+    "transform": "invoice_to_iso20022_transform"
+}

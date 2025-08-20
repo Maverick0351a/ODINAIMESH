@@ -20,13 +20,16 @@ Steps
 4) Deploy services
 - Cloud Run (managed), port 8080, min 0, max 5-10
 - Set env vars from marketplace/MARKETPLACE.md
+- Prefer authenticated invokers (no public unauth); assign only required principals.
+- For tracing: set ODIN_OTEL=1 and ODIN_OTEL_EXPORTER=gcp (or configure OTLP endpoint).
 5) Secure invoker
 - Prefer authenticated invoker; grant specific users/Workload Identity pool service account.
 6) Domain mapping (optional)
 - Map `api.your-domain` -> gateway service, managed TLS.
 
 Secret Manager
-- STRIPE_SECRET_KEY and OPENAI_API_KEY are recommended to be provided via Cloud Run Secret environment variables.
+- Provide ODIN_ADMIN_KEY and ODIN_KEYSTORE_JSON via Cloud Run Secret envs.
+- STRIPE_SECRET_KEY and OPENAI_API_KEY should also be managed via Secret Manager if used.
 
 Health
 - GET /health -> 200 JSON

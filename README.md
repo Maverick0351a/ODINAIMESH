@@ -4,8 +4,10 @@
 
 ![ODIN Protocol](https://img.shields.io/badge/ODIN-Protocol-blue?style=for-the-badge)
 ![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
-![Build](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)
+![Build](https://img.shields.io/badge/build-pass## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.-brightgreen?style=for-the-badge)
 
 **🚀 Production-Ready AI Intranet with 53+ Endpoints | Bridge Networking | OpenAI Compatible**
 

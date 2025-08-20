@@ -9,9 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Enhanced repository documentation and GitHub organization
-- Comprehensive CI/CD pipeline with security scanning
+- Comprehensive CI/CD pipeline with security scanning, code quality
 - Issue templates and pull request templates
 - Code quality checks (Black, isort, flake8, mypy)
+
+### Changed
+- License updated from MIT to Apache 2.0 for enterprise compatibility
 
 ## [1.0.0] - 2025-08-20
 

@@ -1,8 +1,125 @@
-# ODIN Protocol - AI Intranet Implementation
+# ODIN Protocol - Enterprise AI Intranet
 
-[![Build Status](https://github.com/username/repo/workflows/Tests/badge.svg)](https://github.com/username/repo/actions)
+<div align="center">
+
+![ODIN Protocol](https://img.shields.io/badge/ODIN-Protocol-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
+![Build](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
+
+**🚀 Production-Ready AI Intranet with 53+ Endpoints | Bridge Networking | OpenAI Compatible**
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [API Reference](#-api-reference)
+
+</div>
+
+---
+
+## 🎯 What is ODIN?
+
+ODIN (Open Decentralized Intelligence Network) is a **production-grade AI intranet** that enables secure, authenticated communication between AI agents across organizational boundaries. Every message is cryptographically signed, typed, and auditable.
+
+### 🏆 Why Choose ODIN?
+
+- ✅ **53 Production Endpoints** - Complete service mesh with bridge networking
+- ✅ **OpenAI Compatible** - Drop-in replacement with enhanced security  
+- ✅ **Enterprise Security** - HTTP signatures, proof envelopes, policy enforcement
+- ✅ **Cloud Native** - Google Cloud Marketplace ready, Kubernetes & Cloud Run
+- ✅ **Multi-Tenant** - Built-in tenant isolation and quota management
 
 A production-ready implementation of the ODIN Protocol - an **Open Decentralized Intelligence Network** enabling secure, authenticated communication between AI agents across organizational boundaries with full proof-of-work validation and transform receipt capabilities.
+
+## 🚀 Quick Demo
+
+```bash
+# Start ODIN Gateway
+python -m apps.gateway.api
+
+# Send a message with proof verification
+curl -X POST http://localhost:8080/v1/envelope \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello ODIN!"}'
+
+# Bridge to another realm
+curl -X POST http://localhost:8080/bridge/partner-realm \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Cross-realm communication"}'
+```
+
+## 📋 Repository Structure
+
+```
+ODIN Protocol Implementation
+├── 🏗️ Core Services
+│   ├── apps/gateway/          # Main FastAPI gateway (53 endpoints)
+│   ├── apps/agent_beta/       # OpenAI-compatible proxy
+│   └── services/relay/        # Secure HTTP forwarder
+├── 📚 Libraries  
+│   ├── libs/odin_core/        # Protocol implementation (OML-C, OPE, JWKS)
+│   └── gateway/               # Gateway utilities and constants
+├── 🔧 SDKs & Tools
+│   ├── packages/sdk/          # TypeScript/JavaScript SDK
+│   ├── packages/langchain-odin-tools/  # LangChain integrations
+│   └── sdks/python/           # Python SDK
+├── ☁️ Infrastructure
+│   ├── helm/                  # Kubernetes deployment charts
+│   ├── marketplace/           # Google Cloud Marketplace configs
+│   └── scripts/               # Deployment and utility scripts
+├── 🧪 Testing
+│   ├── tests/                 # Integration and E2E tests
+│   └── apps/*/tests/          # Service-specific test suites
+└── 📦 Configuration
+    ├── config/                # Runtime configurations
+    └── packs/realms/          # Business domain packages
+```
+
+## 🔥 Key Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🌐 **Gateway Service**
+- **53 Active Endpoints** for complete service mesh
+- **Bridge & Mesh Networking** for cross-realm communication  
+- **Service Registry** for AI agent discovery
+- **Transform Receipts** for message audit trails
+- **Admin APIs** for runtime configuration
+
+</td>
+<td width="50%">
+
+### 🤖 **Agent Beta Service**  
+- **OpenAI API Compatible** - drop-in replacement
+- **HTTP Signature Enforcement** for authentication
+- **Prometheus Metrics** for observability
+- **Security Middleware** stack
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🔐 **Security Features**
+- **Cryptographic Proof Envelopes** (OPE)
+- **HTTP Signature Authentication** (RFC 9421)
+- **Policy Enforcement Engine** 
+- **Response Signing** for verification
+- **Multi-tenant Isolation**
+
+</td>
+<td>
+
+### 📊 **Enterprise Features**
+- **Prometheus Observability** 
+- **Structured Logging** with correlation IDs
+- **Health Checks** and diagnostics
+- **Auto-scaling** Cloud Run deployment
+- **Marketplace Integration**
+
+</td>
+</tr>
+</table>
 
 ## 🏗️ Complete Implementation
 

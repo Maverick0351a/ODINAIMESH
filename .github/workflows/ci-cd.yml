@@ -1,0 +1,264 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  PYTHON_VERSION: '3.8'
+  NODE_VERSION: '16'
+
+jobs:
+  # Python Tests
+  python-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-asyncio
+    
+    - name: Run Python tests
+      run: |
+        python -m pytest --cov=apps --cov=libs --cov-report=xml --cov-report=term-missing
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: python
+        name: python-${{ matrix.python-version }}
+
+  # JavaScript/TypeScript Tests
+  javascript-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['16', '18', '20']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: |
+          packages/sdk/package-lock.json
+          packages/langchain-odin-tools/package-lock.json
+    
+    - name: Install SDK dependencies
+      run: npm ci
+      working-directory: packages/sdk
+    
+    - name: Run SDK tests
+      run: npm test
+      working-directory: packages/sdk
+    
+    - name: Install LangChain tools dependencies
+      run: npm ci
+      working-directory: packages/langchain-odin-tools
+    
+    - name: Run LangChain tools tests
+      run: npm test
+      working-directory: packages/langchain-odin-tools
+
+  # Security Scanning
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install security tools
+      run: |
+        pip install bandit safety
+    
+    - name: Run Bandit security scan
+      run: bandit -r apps/ libs/ -f json -o bandit-report.json
+      continue-on-error: true
+    
+    - name: Run Safety dependency scan
+      run: safety check --json --output safety-report.json
+      continue-on-error: true
+    
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+
+  # Code Quality
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install quality tools
+      run: |
+        pip install black isort flake8 mypy
+    
+    - name: Check code formatting with Black
+      run: black --check .
+    
+    - name: Check import sorting with isort
+      run: isort --check-only .
+    
+    - name: Run flake8 linting
+      run: flake8 .
+    
+    - name: Run mypy type checking
+      run: mypy apps/ libs/
+      continue-on-error: true
+
+  # Build Docker Images
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [python-tests, javascript-tests]
+    if: github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Build Gateway image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64
+        push: false
+        tags: |
+          odin-protocol/gateway:latest
+          odin-protocol/gateway:${{ github.sha }}
+    
+    - name: Build Agent Beta image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile.agent-beta
+        platforms: linux/amd64,linux/arm64
+        push: false
+        tags: |
+          odin-protocol/agent-beta:latest
+          odin-protocol/agent-beta:${{ github.sha }}
+
+  # Integration Tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: [python-tests]
+    services:
+      redis:
+        image: redis:6
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest pytest-asyncio
+    
+    - name: Run integration tests
+      run: python -m pytest tests/e2e/ -v
+      env:
+        REDIS_URL: redis://localhost:6379
+        ODIN_ALLOW_TEST_HOSTS: 1
+
+  # Performance Tests
+  performance-tests:
+    runs-on: ubuntu-latest
+    needs: [python-tests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install locust
+    
+    - name: Run performance tests
+      run: |
+        # Add performance test commands here
+        echo "Performance tests would run here"
+
+  # Deploy to staging (on main branch)
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: [python-tests, javascript-tests, security-scan, integration-tests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: staging
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to staging
+      run: |
+        echo "Staging deployment would happen here"
+        # Add actual deployment commands
+    
+    - name: Run smoke tests
+      run: |
+        echo "Smoke tests would run here"
+        # Add smoke test commands

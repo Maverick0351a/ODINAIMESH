@@ -1,55 +1,77 @@
-# ODIN Protocol - Enterprise AI Communication Network
+# 🚀 ODIN Protocol - Enterprise AI Infrastructure Platform
 
 <div align="center">
 
-![ODIN Protocol](https://img.shields.io/badge/ODIN-Protocol-blue?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
-![Beta](https://img.shields.io/badge/0.9.0--beta-features-orange?style=for-the-badge)
-![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)
-![Build](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
+[![CI/CD Pipeline](https://github.com/Maverick0351a/ODINAIMESH/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Maverick0351a/ODINAIMESH/actions/workflows/ci-cd.yml)
+[![Deploy to Cloud Run](https://github.com/Maverick0351a/ODINAIMESH/actions/workflows/deploy.yml/badge.svg)](https://github.com/Maverick0351a/ODINAIMESH/actions/workflows/deploy.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.0%2B-blue.svg)](https://typescriptlang.org)
 
-**🚀 Production-Ready AI Communication Network | Enterprise Security | OpenAI Compatible**
+**Production-ready enterprise AI infrastructure providing secure, verifiable, and compliant AI-to-AI communication at scale.**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [API Reference](#-api-reference)
+[🏗️ Architecture](#️-architecture) • [🚀 Quick Start](#-quick-start) • [💰 Revenue Models](#-revenue-models) • [📚 Documentation](#-documentation)
 
 </div>
 
 ---
 
-## 🎯 What is ODIN?
+## 🎯 Overview
 
-ODIN (Open Decentralized Intelligence Network) is a **production-grade AI communication network** that enables secure, authenticated interaction between AI agents across organizational boundaries. Every message is cryptographically signed, typed, and auditable with complete proof validation.
+ODIN Protocol is a comprehensive enterprise AI platform that enables organizations to deploy AI systems with cryptographic proof of execution, full audit trails, and zero-trust security. Built for financial institutions, payment processors, and enterprise customers requiring regulatory compliance.
 
-### 🏆 Why Choose ODIN?
+### 🏆 Key Features
 
-- ✅ **114 Production Endpoints** - Complete service mesh with enterprise features
-- ✅ **OpenAI Compatible** - Drop-in replacement with enhanced security  
-- ✅ **Enterprise Security** - HTTP signatures, proof envelopes, policy enforcement
-- ✅ **Cloud Native** - Google Cloud ready, Kubernetes & Cloud Run optimized
-- ✅ **Strategic Business Features** - RTN transparency, Federation settlement, Payment processing
+- **🔒 Zero-Trust Security**: Cryptographic proof chains, HTTP signatures, JWKS rotation
+- **🏢 Strategic Business APIs**: 28 endpoints for enterprise automation (RTN, Federation, Payments)
+- **💰 Revenue-Ready**: Bridge Pro ($2k-10k/mo), Research Engine subscriptions
+- **📈 Production Scale**: 1000+ req/sec, auto-scaling, comprehensive monitoring
+- **🌐 Multi-Cloud**: Google Cloud Platform with AWS/Azure support planned
 
-A production-ready implementation of the ODIN Protocol enabling secure, authenticated communication between AI agents across organizational boundaries with full proof-of-work validation and transform receipt capabilities.
+### 🌍 Live Production Services
 
-## 🚀 Quick Demo
+| Service | URL | Status |
+|---------|-----|--------|
+| **Gateway** | https://odin-gateway-125773133762.us-central1.run.app | ✅ Live |
+| **Agent Beta** | https://odin-agent-beta-125773133762.us-central1.run.app | ✅ Live |
+| **Documentation** | https://odin-site-125773133762.us-central1.run.app | ✅ Live |
 
+## 🚀 Quick Start
+
+### Try the Live Production API
 ```bash
-# Start ODIN Gateway (114 endpoints)
-python -m apps.gateway.api
+# Test health endpoint
+curl https://odin-gateway-125773133762.us-central1.run.app/health
 
 # Send a message with proof verification
-curl -X POST http://localhost:8080/v1/envelope \
+curl -X POST https://odin-gateway-125773133762.us-central1.run.app/v1/envelope \
   -H "Content-Type: application/json" \
-  -d '{"text": "Hello ODIN!"}'
-
-# Bridge to another realm
-curl -X POST http://localhost:8080/bridge/partner-realm \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Cross-realm communication"}'
+  -d '{"intent": "echo", "payload": {"message": "Hello ODIN!"}}'
 
 # Access strategic business features
-curl -X GET http://localhost:8080/rtn/receipts     # RTN transparency
-curl -X GET http://localhost:8080/federation/status  # Settlement network
-curl -X POST http://localhost:8080/payments/bridge  # Payment processing
+curl https://odin-gateway-125773133762.us-central1.run.app/rtn/health
+curl https://odin-gateway-125773133762.us-central1.run.app/federation/health  
+curl https://odin-gateway-125773133762.us-central1.run.app/payments/health
+
+# OpenAI-compatible endpoint
+curl -X POST https://odin-agent-beta-125773133762.us-central1.run.app/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "Hello!"}]}'
+```
+
+### Local Development
+```bash
+# Clone repository
+git clone https://github.com/Maverick0351a/ODINAIMESH.git
+cd ODINAIMESH
+
+# Install dependencies
+pip install -r requirements.txt
+cd packages/sdk && npm install && cd ../..
+
+# Start development server
+python -m uvicorn apps.gateway.api:app --reload --port 8000
 ```
 
 ## 🔥 Strategic Business Features
@@ -88,6 +110,27 @@ curl -X POST http://localhost:8080/payments/bridge  # Payment processing
 </td>
 </tr>
 </table>
+
+```
+
+## 💰 Revenue Models
+
+### 🏦 Bridge Pro - Enterprise Payment Processing
+- **Target Market**: Financial institutions, payment processors  
+- **Pricing**: $2,000 - $10,000/month
+- **Features**: ISO 20022, approval workflows, compliance reporting
+- **Scalability**: Per-transaction pricing for high volume
+
+### 🧪 Research Engine - Multi-tenant AI Platform  
+- **Free Tier**: 1 project, 1,000 requests/month
+- **Pro Tier**: $29/month - 10 projects, 50,000 requests
+- **Enterprise Tier**: $299/month - Unlimited projects, dedicated support
+- **Add-ons**: Additional compute, storage, priority support
+
+### 🎮 BYOM Playground - Lead Generation
+- **Strategy**: Free secure model testing → Research Engine conversion
+- **Features**: 15-minute tokens, real-time testing, embedded CTAs
+- **Metrics**: Lead capture, conversion tracking, usage analytics
 
 ## 📋 Repository Structure
 
@@ -335,7 +378,27 @@ helm install odin-gateway helm/odin-gateway-relay/
 - **Mesh Discovery** - Automatic peer discovery and route optimization
 - **Transform Receipts** - Track message transformations across hops
 
-## 📋 API Reference
+## � Documentation
+
+### 🌍 Live Documentation
+- **[Production Site](https://odin-site-125773133762.us-central1.run.app)** - Interactive guides and examples
+- **[API Explorer](https://odin-gateway-125773133762.us-central1.run.app/docs)** - Swagger UI for all 114 endpoints
+- **[Strategic Business APIs](https://odin-gateway-125773133762.us-central1.run.app/redoc)** - RTN, Federation, Payments documentation
+
+### 📖 Comprehensive Guides
+- **[Complete Feature Overview](COMPREHENSIVE_README.md)** - Detailed technical documentation (718 lines)
+- **[Getting Started Guide](docs/getting-started.md)** - Quick start tutorial
+- **[Security Implementation](docs/security.md)** - Zero-trust security details
+- **[Deployment Guide](marketplace/CLOUDRUN.md)** - Production deployment instructions
+- **[Repository Inventory](docs/REPO_INVENTORY.md)** - Complete codebase overview
+
+### 🛠️ Developer Resources
+- **[TypeScript SDK](packages/sdk/)** - `@odin-protocol/sdk` NPM package
+- **[LangChain Tools](packages/langchain-odin-tools/)** - `@odin-protocol/langchain-tools`
+- **[Python Examples](sdks/python/)** - Python integration examples
+- **[CI/CD Pipeline](.github/workflows/)** - GitHub Actions deployment
+
+## �📋 API Reference
 
 ### Gateway Endpoints (114 total)
 ```

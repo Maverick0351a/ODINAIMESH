@@ -2,6 +2,9 @@
 
 FROM node:18-alpine as builder
 
+# Install git for VitePress
+RUN apk add --no-cache git
+
 # Set working directory
 WORKDIR /app
 

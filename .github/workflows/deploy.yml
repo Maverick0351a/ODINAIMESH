@@ -17,8 +17,10 @@ on:
 
 env:
   REGION: us-central1
-  REPO: odin
+  REPO: odin-images
   GATEWAY_SVC: odin-gateway
+  AGENT_BETA_SVC: odin-agent-beta
+  RESEARCH_SVC: odin-research
   RELAY_SVC: odin-relay
   SITE_SVC: odin-site
   TAG: ${{ github.sha }}
@@ -62,10 +64,24 @@ jobs:
 
       - name: Build and push Gateway image
         run: |
-          docker build -f deploy/gateway/Dockerfile \
+          docker build -f Dockerfile \
             -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/gateway:${{ env.TAG }} \
             .
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/gateway:${{ env.TAG }}
+
+      - name: Build and push Agent Beta image
+        run: |
+          docker build -f Dockerfile.agent-beta \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/agent-beta:${{ env.TAG }} \
+            .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/agent-beta:${{ env.TAG }}
+
+      - name: Build and push Research image
+        run: |
+          docker build -f Dockerfile.research \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/research:${{ env.TAG }} \
+            .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/research:${{ env.TAG }}
 
       - name: Build and push Relay image
         run: |
@@ -103,6 +119,41 @@ jobs:
             --concurrency 60 \
             --min-instances 0 \
             --max-instances 10 \
+            --timeout 300
+
+      - name: Deploy Agent Beta service
+        run: |
+          gcloud run deploy ${{ env.AGENT_BETA_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/agent-beta:${{ env.TAG }} \
+            --allow-unauthenticated \
+            --service-account odin-agent-beta@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com \
+            --set-env-vars GOOGLE_CLOUD_PROJECT=${{ steps.env.outputs.project_id }} \
+            --set-env-vars ODIN_ENVIRONMENT=production \
+            --memory 512Mi \
+            --cpu 1 \
+            --concurrency 60 \
+            --min-instances 0 \
+            --max-instances 10 \
+            --timeout 300
+
+      - name: Deploy Research service
+        run: |
+          gcloud run deploy ${{ env.RESEARCH_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/research:${{ env.TAG }} \
+            --allow-unauthenticated \
+            --service-account odin-research@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com \
+            --set-env-vars GOOGLE_CLOUD_PROJECT=${{ steps.env.outputs.project_id }} \
+            --set-env-vars ODIN_ENVIRONMENT=production \
+            --set-env-vars ODIN_RESEARCH_ENABLED=true \
+            --memory 1024Mi \
+            --cpu 1 \
+            --concurrency 40 \
+            --min-instances 0 \
+            --max-instances 15 \
             --timeout 300
 
       - name: Deploy Gateway service
@@ -160,6 +211,16 @@ jobs:
             --project ${{ steps.env.outputs.project_id }} \
             --format='value(status.url)')
           
+          AGENT_BETA_URL=$(gcloud run services describe ${{ env.AGENT_BETA_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          RESEARCH_URL=$(gcloud run services describe ${{ env.RESEARCH_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
           SITE_URL=$(gcloud run services describe ${{ env.SITE_SVC }} \
             --region ${{ env.REGION }} \
             --project ${{ steps.env.outputs.project_id }} \
@@ -174,8 +235,16 @@ jobs:
           echo "Testing Gateway metrics..."
           curl -sSf $GATEWAY_URL/metrics || exit 1
           
+          echo "Testing Agent Beta health..."
+          curl -sSf $AGENT_BETA_URL/health || exit 1
+          
           echo "Testing Research Engine health..."
-          curl -sSf $GATEWAY_URL/v1/research/health || exit 1
+          curl -sSf $RESEARCH_URL/health || exit 1
+          
+          echo "Testing Strategic Business APIs..."
+          curl -sSf $GATEWAY_URL/rtn/health || exit 1
+          curl -sSf $GATEWAY_URL/federation/health || exit 1
+          curl -sSf $GATEWAY_URL/payments/health || exit 1
           
           echo "Testing Site..."
           curl -sSf $SITE_URL/ || exit 1
@@ -183,6 +252,8 @@ jobs:
           echo "✅ All smoke tests passed!"
           echo "🚀 Deployment URLs:"
           echo "Gateway: $GATEWAY_URL"
+          echo "Agent Beta: $AGENT_BETA_URL"
+          echo "Research: $RESEARCH_URL"
           echo "Site: $SITE_URL"
 
       - name: Update CORS configuration

@@ -1,0 +1,5 @@
+{
+  "allow_kids": ["env:*", "*"],
+  "deny_kids": ["bad*"],
+  "allowed_jwks_hosts": ["localhost", "127.0.0.1", "*.yourcompany.com"]
+}

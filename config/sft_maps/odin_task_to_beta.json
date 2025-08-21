@@ -1,0 +1,8 @@
+{
+  "from_sft": "odin.task@v1",
+  "to_sft": "beta@v1",
+  "intents": { "odin.task.request": "beta.request" },
+  "fields": { "reason": "why", "task": "task", "args": "args" },
+  "const": {},
+  "drop": []
+}

@@ -1,0 +1,65 @@
+########################################################################
+# Docker build context ignore list
+# Keep context small and reproducible for Python + Node monorepo
+########################################################################
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+coverage/
+htmlcov/
+*.egg-info/
+*.egg
+*.whl
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# Node/JS
+node_modules/
+packages/*/node_modules/
+.npm/
+.yarn/
+.pnpm-store/
+.turbo/
+.nyc_output/
+
+# VCS & CI
+.git/
+.git/**
+.github/
+
+# Builds & Artifacts
+build/
+dist/
+coverage/
+*.log
+.cache/
+.tmp/
+tmp/
+tmp-*/
+
+# Project-specific
+odin.egg-info/
+
+# Ignore ignore-files themselves in Docker context
+.gitignore
+.gcloudignore
+

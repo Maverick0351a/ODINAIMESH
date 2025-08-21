@@ -140,6 +140,35 @@ def ensure_keystore_file(path: str) -> tuple[Dict[str, OpeKeypair], str]:
         save_keystore_to_file(path, ks, active)
         return ks, active
 
+    # Try ODIN_KEYSTORE_JSON (multi-key keystore from env/secret)
+    js = os.getenv("ODIN_KEYSTORE_JSON")
+    if js:
+        try:
+            data = json.loads(js)
+            keys_list = data.get("keys", []) or []
+            env_mapping: Dict[str, OpeKeypair] = {}
+            for ent in keys_list:
+                kid = ent.get("kid")
+                priv_b64 = ent.get("priv_b64")
+                pub_b64 = ent.get("pub_b64")
+                if kid and priv_b64 and pub_b64:
+                    env_mapping[kid] = _load_keypair_from_raw(kid, priv_b64, pub_b64)
+            # Resolve active_kid: prefer explicit field, else first with active=true, else lexicographically first
+            active_kid = data.get("active_kid")
+            if not active_kid:
+                for ent in keys_list:
+                    if ent.get("active") and ent.get("kid") in env_mapping:
+                        active_kid = ent.get("kid")
+                        break
+            if not active_kid and env_mapping:
+                active_kid = sorted(env_mapping.keys())[0]
+            if env_mapping and active_kid in env_mapping:
+                save_keystore_to_file(path, env_mapping, active_kid)
+                return env_mapping, active_kid  # seeded from env
+        except Exception:
+            # Fall through to generate fresh key if env is malformed
+            pass
+
     # Generate fresh persistent key
     kp = OpeKeypair.generate("k1")
     ks = {kp.kid: kp}

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: odin-gateway-relay
+version: 0.1.0
+description: Helm chart stub for ODIN Gateway and Relay (Kubernetes)

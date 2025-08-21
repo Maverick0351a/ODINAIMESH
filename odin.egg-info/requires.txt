@@ -6,3 +6,8 @@ pydantic>=2.7
 blake3>=1.0
 cbor2>=5.6
 prometheus-client>=0.20
+
+[gcp]
+google-cloud-storage>=2.16.0
+google-cloud-firestore>=2.16.0
+google-cloud-secret-manager>=2.20.0

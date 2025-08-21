@@ -1,0 +1,6 @@
+{
+    "//": "This is an example SFT map file. Maps define transformations between data formats.",
+    "source": "invoice",
+    "target": "iso20022",
+    "transform": "example_transform"
+}

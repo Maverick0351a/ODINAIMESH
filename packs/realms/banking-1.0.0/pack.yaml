@@ -1,0 +1,20 @@
+realm_name: "banking"
+version: "1.0.0"
+core_range: ">=1.0.0-rc1,<2.0.0"
+issuers: []
+jwks:
+  url: ""
+data_classes:
+  - "pci"
+rate_limits:
+  - tenant: "default"
+    qps: 5
+egress_allowlist:
+  - ".*"  # Allow all outbound URLs for dev/test
+policy:
+  files:
+    - "pci.json"
+sft:
+  registry: "registry.json"
+  maps:
+    - "invoice_to_iso20022.json"

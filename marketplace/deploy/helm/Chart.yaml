@@ -1,0 +1,5 @@
+apiVersion: v2
+name: odin-gateway-relay
+version: 0.1.0
+description: Minimal Helm chart for ODIN Gateway and Relay
+type: application

@@ -1,0 +1,14 @@
+{
+  "allow_kids": ["*"],
+  "deny_kids": [],
+  "allowed_jwks_hosts": ["localhost", "127.0.0.1"],
+
+  "deny_intents": ["alpha.delete", "beta.delete"],
+
+  "require_reason_for": ["alpha.ask", "beta.request"],
+
+  "field_constraints": [
+    { "when_intent": "alpha.ask",     "path": "/reason", "op": "min_len", "value": 3 },
+    { "when_intent": "beta.request",  "path": "/why",    "op": "min_len", "value": 3 }
+  ]
+}

@@ -1,0 +1,15 @@
+gateway:
+  image: us-central1-docker.pkg.dev/odin-producer/odin/gateway:v1.0.0
+  env:
+    ODIN_STORAGE_BACKEND: gcs
+    ODIN_GCS_BUCKET: odin-producer-mesh-data
+    ODIN_GCS_PREFIX: odin
+    ODIN_LEDGER_BACKEND: firestore
+    ODIN_FIRESTORE_COLLECTION: odin_ledger
+relay:
+  image: us-central1-docker.pkg.dev/odin-producer/odin/relay:v1.0.0
+  env:
+    ODIN_RELAY_RATE_LIMIT_QPS: 5
+    ODIN_RELAY_TIMEOUT_MS: 10000
+    ODIN_RELAY_RETRIES: 2
+    ODIN_RELAY_RETRY_BACKOFF_MS: 250

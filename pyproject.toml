@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "odin"
 version = "0.0.1"
-description = "ODIN: HTTP for AI – minimal scaffold"
+description = "ODIN Protocol — The Intranet for AI"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "fastapi>=0.115",
@@ -19,6 +20,13 @@ dependencies = [
   "prometheus-client>=0.20",
 ]
 
+# PEP 621: keywords is a field of [project]
+keywords = ["odin", "ai", "intranet", "protocol", "proofs", "cbor", "dag", "ed25519", "cid", "fastapi"]
+
+[project.urls]
+Homepage = "https://github.com/"  # update with repo URL if available
+Documentation = "https://github.com/"  # update when published
+
 # This root package is a meta project for dev tooling and dependencies only.
 # Avoid setuptools auto-discovery across multiple top-level dirs (apps, libs).
 [tool.setuptools]
@@ -26,5 +34,12 @@ packages = []
 
 [tool.pytest.ini_options]
 addopts = "-q"
-pythonpath = ["."]
+pythonpath = [".", "libs/odin_core"]
 testpaths = ["tests", "apps", "libs"]
+
+[project.optional-dependencies]
+gcp = [
+  "google-cloud-storage>=2.16.0",
+  "google-cloud-firestore>=2.16.0",
+  "google-cloud-secret-manager>=2.20.0",
+]

@@ -1,0 +1,10 @@
+{
+  "functions": [
+    {
+      "name": "example_transform",
+      "description": "An example transformation function.",
+      "entrypoint": "my_module.my_function",
+      "runtime": "python"
+    }
+  ]
+}

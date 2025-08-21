@@ -1,0 +1,8 @@
+{
+  "title": "ODIN Gateway + Relay",
+  "widgets": [
+    { "text": { "content": "Gateway/Relay request rate, latency, and policy violations.", "format": "MARKDOWN" } },
+    { "xyChart": { "dataSets": [ { "timeSeriesQuery": { "timeSeriesFilter": { "filter": "metric.type=\"workload.googleapis.com/http/server/request_count\" resource.type=\"cloud_run_revision\" resource.label.service_name=\"gateway\"" } } } ] } },
+    { "xyChart": { "dataSets": [ { "timeSeriesQuery": { "timeSeriesFilter": { "filter": "metric.type=\"workload.googleapis.com/http/server/request_count\" resource.type=\"cloud_run_revision\" resource.label.service_name=\"relay\"" } } } ] } }
+  ]
+}

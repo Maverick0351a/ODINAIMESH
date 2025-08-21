@@ -1,0 +1,64 @@
+name: Deploy to Cloud Run (odin-producer)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: odin-producer
+      REGION: us-central1
+      REPO: odin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SA }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: '>= 474.0.0'
+
+      - name: Configure Docker auth
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev -q
+
+      - name: Build & Push Gateway
+        run: |
+          G_IMG="us-central1-docker.pkg.dev/${PROJECT_ID}/${REPO}/gateway:${GITHUB_REF_NAME}"
+          gcloud builds submit --tag "$G_IMG" .
+
+      - name: Build & Push Relay
+        run: |
+          R_IMG="us-central1-docker.pkg.dev/${PROJECT_ID}/${REPO}/relay:${GITHUB_REF_NAME}"
+          gcloud builds submit --config cloudbuild.relay.yaml --substitutions _TAG="$R_IMG" .
+
+      - name: Deploy Gateway
+        run: |
+          G_IMG="us-central1-docker.pkg.dev/${PROJECT_ID}/${REPO}/gateway:${GITHUB_REF_NAME}"
+          gcloud run deploy gateway \
+            --project=${PROJECT_ID} --region=${REGION} --image="$G_IMG" --platform=managed \
+            --service-account=gateway-run@${PROJECT_ID}.iam.gserviceaccount.com --port=8080 \
+            --min-instances=0 --max-instances=5 \
+            --update-env-vars="ODIN_STORAGE_BACKEND=gcs,ODIN_GCS_BUCKET=odin-producer-mesh-data,ODIN_GCS_PREFIX=odin,ODIN_LEDGER_BACKEND=firestore,ODIN_FIRESTORE_COLLECTION=odin_ledger,ODIN_TRANSFORM_RECEIPTS=1,ODIN_SIGN_EMBED=1"
+
+      - name: Deploy Relay
+        run: |
+          R_IMG="us-central1-docker.pkg.dev/${PROJECT_ID}/${REPO}/relay:${GITHUB_REF_NAME}"
+          gcloud run deploy relay \
+            --project=${PROJECT_ID} --region=${REGION} --image="$R_IMG" --platform=managed \
+            --service-account=relay-run@${PROJECT_ID}.iam.gserviceaccount.com --port=8080 \
+            --min-instances=0 --max-instances=10 \
+            --update-env-vars="ODIN_RELAY_RATE_LIMIT_QPS=5,ODIN_RELAY_TIMEOUT_MS=10000,ODIN_RELAY_RETRIES=2,ODIN_RELAY_RETRY_BACKOFF_MS=250"

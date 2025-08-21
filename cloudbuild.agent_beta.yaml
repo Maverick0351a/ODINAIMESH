@@ -1,0 +1,44 @@
+﻿substitutions:
+  _REGION: us-central1
+  _AR_REPO: odin
+  _SERVICE: agent-beta
+  _DEPLOY: "false"
+  _GATEWAY_JWKS_URL: ""
+
+steps:
+- name: gcr.io/kaniko-project/executor:latest
+  args:
+  - --destination=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:latest
+  - --dockerfile=apps/agent_beta/Dockerfile
+  - --context=dir:///workspace
+  - --cache=true
+- name: gcr.io/cloud-builders/gcloud
+  entrypoint: bash
+  args:
+  - -lc
+  - |
+    echo "Waiting for ${_SERVICE}:latest to be visible in Artifact Registry...";
+    for i in {1..30}; do
+      gcloud artifacts docker images list ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE} --include-tags --format='value(TAGS)' | grep -q '\blatest\b' && echo "Found" && exit 0;
+      echo "Not yet visible, retry $i"; sleep 2;
+    done;
+    echo "Tag not visible after waiting"; exit 1
+- name: gcr.io/cloud-builders/gcloud
+  id: "Optional deploy to Cloud Run"
+  entrypoint: bash
+  args:
+  - -lc
+  - |
+    if [ "${_DEPLOY}" = "true" ]; then
+      echo "Deploying ${_SERVICE} to Cloud Run in ${_REGION}...";
+      gcloud run deploy ${_SERVICE} \
+        --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:latest \
+        --region ${_REGION} \
+        --platform managed \
+        --service-account agent-beta-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+        --allow-unauthenticated \
+        --set-env-vars ODIN_HTTP_SIGN_JWKS_URL=${_GATEWAY_JWKS_URL};
+    else
+      echo "_DEPLOY is false; skipping deployment.";
+    fi
+ 

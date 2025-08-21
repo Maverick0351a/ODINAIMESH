@@ -1,0 +1,53 @@
+substitutions:
+  _REGION: us-central1
+  _AR_REPO: odin
+  _SERVICE: agent-beta
+  _DEPLOY: "true"        # set to "false" to skip deploy
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# The canonical Artifact Registry URL: <region>-docker.pkg.dev/<project>/<repo>/<service>:<sha>
+images:
+- '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:${SHORT_SHA}'
+
+steps:
+# Build
+- id: build
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'build'
+    - '-f'
+    - 'Dockerfile.agent-beta'
+    - '-t'
+    - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:${SHORT_SHA}'
+    - '.'
+
+# Push
+- id: push
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'push'
+    - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:${SHORT_SHA}'
+
+# Conditional deploy to Cloud Run
+- id: deploy (conditional)
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  args:
+    - '-lc'
+    - |
+      set -euo pipefail
+      if [[ "${_DEPLOY}" == "true" ]]; then
+        gcloud run deploy "${_SERVICE}" \
+          --image "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:${SHORT_SHA}" \
+          --region "${_REGION}" \
+          --platform managed \
+          --allow-unauthenticated \
+          --set-env-vars=PORT=8080 \
+          --quiet
+      else
+        echo "Skipping deploy because _DEPLOY=${_DEPLOY}"
+      fi
+
+timeout: "1200s"

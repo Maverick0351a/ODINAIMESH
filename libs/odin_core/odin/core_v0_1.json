@@ -1,0 +1,22 @@
+{
+  "id": "core@v0.1",
+  "description": "ODIN Core Semantics v0.1 — minimal shared vocabulary for AI-to-AI intents.",
+  "fields": {
+    "intent": { "type": "string", "required": true },
+    "actor": { "type": ["string", "object"], "required": false },
+    "subject": { "type": ["string", "object"], "required": false },
+    "resource": { "type": ["string", "object"], "required": false },
+    "action": { "type": "string", "required": false },
+    "amount": { "type": "number", "required": false },
+    "units": { "type": "string", "required": false },
+    "reason": { "type": "string", "required": false },
+    "ts": { "type": ["integer", "string"], "required": false }
+  },
+  "intents": {
+    "echo": {},
+    "translate": {},
+    "transfer": {},
+    "notify": {},
+    "query": {}
+  }
+}

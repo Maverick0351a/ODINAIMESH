@@ -87,6 +87,35 @@ def sign_over_content(keypair: OpeKeypair, content_bytes: bytes, oml_cid: Option
     }
 
 
+def sign_ope(content_bytes: bytes, *, kid: str = "kid", ts_ns: Optional[int] = None) -> tuple[bytes, str, bytes]:
+    """Convenience: generate a one-off keypair and sign, returning (sig_bytes, kid, public_key_bytes).
+    This is for tests/compatibility only; production uses sign_over_content.
+    """
+    kp = OpeKeypair.generate(kid)
+    ts = _def_now_ns() if ts_ns is None else int(ts_ns)
+    msg = _build_message(ts, content_bytes, None)
+    sig = kp.private_key.sign(msg)
+    pub_raw = kp.public_key.public_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw,
+    )
+    return sig, kp.kid, pub_raw
+
+
+def verify_ope(pub_raw: bytes, content_bytes: bytes, sig_raw: bytes, *, ts_ns: Optional[int] = None) -> bool:
+    """Low-level verify to match the sign_ope message format (no oml_cid binding)."""
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
+    ts = _def_now_ns() if ts_ns is None else int(ts_ns)
+    msg = _build_message(ts, content_bytes, None)
+    pub = Ed25519PublicKey.from_public_bytes(pub_raw)
+    try:
+        pub.verify(sig_raw, msg)
+        return True
+    except Exception:
+        return False
+
+
 def verify_over_content(
     ope: Dict[str, Any],
     content_bytes: bytes,

@@ -1,0 +1,84 @@
+substitutions:
+  _SERVICE: odin-gateway
+  _REGION: us-central1
+  _AR_REPO: odin
+  _DEPLOY: "true"  # set to "false" to skip Cloud Run deployment
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # Python tests
+  - id: "Python tests"
+    name: "python:3.11-slim"
+    entrypoint: bash
+    env:
+      - "PYTHONUNBUFFERED=1"
+    args:
+      - -lc
+      - |
+        set -euo pipefail
+        python -V
+        pip install --no-cache-dir -U pip
+        pip install --no-cache-dir -r requirements.txt
+        # Test-only deps (optional extras)
+        pip install --no-cache-dir pytest google-cloud-storage google-cloud-firestore google-cloud-secret-manager
+        export PYTHONPATH="$PWD:$PWD/libs/odin_core"
+        # Keep storage local during CI tests
+        export ODIN_STORAGE_BACKEND=local
+        python -m pytest -q
+
+  # JS SDK tests (if present)
+  - id: "JS SDK tests"
+    name: "node:20-bullseye"
+    dir: "packages/sdk"
+    entrypoint: bash
+    args:
+      - -lc
+      - |
+        set -euo pipefail
+        node -v && npm -v
+        if [ -f package-lock.json ]; then npm ci; else npm install; fi
+        npm run build --silent
+        npm test --silent
+
+  # Build and push image to Artifact Registry
+  - id: "Build image"
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+      - .
+
+  - id: "Push image"
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+
+  # Optional deploy to Cloud Run
+  - id: "Deploy to Cloud Run"
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -lc
+      - |
+        set -euo pipefail
+        if [ "${_DEPLOY}" = "true" ]; then
+          gcloud run deploy ${_SERVICE} \
+            --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA \
+            --region ${_REGION} \
+            --platform managed \
+            --no-allow-unauthenticated \
+            --port 8080 \
+            --update-env-vars ODIN_SIGN_ROUTES=/v1/translate,ODIN_SIGN_REQUIRE=1,ODIN_STORAGE_BACKEND=local,ODIN_ENFORCE_ROUTES=/v1/translate\,/v1/bridge,ODIN_ENFORCE_REQUIRE=1,ODIN_OTEL=1,ODIN_OTEL_EXPORTER=gcp
+        else
+          echo "Skipping deploy (_DEPLOY=${_DEPLOY})"
+        fi
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+
+# Increase if builds are slow
+timeout: "1200s"

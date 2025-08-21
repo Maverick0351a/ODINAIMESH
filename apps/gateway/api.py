@@ -16,6 +16,19 @@ import time
 from pathlib import Path
 from libs.odin_core.odin.constants import ENV_DATA_DIR, DEFAULT_DATA_DIR
 import os
+import asyncio
+from datetime import datetime
+
+# Enhanced ODIN features
+from libs.odin_core.odin.cache import get_cache, init_cache_managers, cache_health_check
+from libs.odin_core.odin.connection_pool import get_pool_manager, connection_health_check
+from libs.odin_core.odin.security import (
+    get_certificate_pinner, get_audit_logger, get_rate_limiter,
+    create_security_headers, log_security_event, SecurityEvent, SecurityLevel,
+    security_health_check
+)
+from libs.odin_core.odin.tracing import trace_operation, get_tracer
+from libs.odin_core.odin.migration_manager import MigrationManager
 
 # OML core
 from libs.odin_core.odin.oml import to_oml_c, compute_cid, get_default_sft
@@ -132,6 +145,37 @@ def _orjson_dumps(v, *, default):
 
 @asynccontextmanager
 async def _lifespan(app: FastAPI):
+    # Initialize enhanced ODIN features
+    try:
+        # Initialize caching layer
+        cache = await get_cache()
+        cache_managers = await init_cache_managers()
+        app.state.cache = cache
+        app.state.cache_managers = cache_managers
+        _log.info("✅ Cache layer initialized")
+        
+        # Initialize connection pools
+        pool_manager = await get_pool_manager()
+        app.state.pool_manager = pool_manager
+        _log.info("✅ Connection pools initialized")
+        
+        # Initialize security systems
+        cert_pinner = get_certificate_pinner()
+        audit_logger = get_audit_logger()
+        rate_limiter = get_rate_limiter()
+        app.state.cert_pinner = cert_pinner
+        app.state.audit_logger = audit_logger
+        app.state.rate_limiter = rate_limiter
+        _log.info("✅ Security systems initialized")
+        
+        # Initialize migration manager
+        migration_manager = MigrationManager()
+        app.state.migration_manager = migration_manager
+        _log.info("✅ Migration manager initialized")
+        
+    except Exception as e:
+        _log.error(f"Failed to initialize enhanced features: {e}")
+    
     # Pre-warm HEL policy and SFT maps registries; start optional watchers
     try:
         wire_startup(app)
@@ -160,9 +204,72 @@ async def _lifespan(app: FastAPI):
         pass
     # Yield control to application runtime
     yield
+    
+    # Cleanup on shutdown
+    try:
+        if hasattr(app.state, 'cache') and app.state.cache:
+            await app.state.cache.disconnect()
+        if hasattr(app.state, 'pool_manager') and app.state.pool_manager:
+            await app.state.pool_manager.close_all()
+        _log.info("✅ Enhanced features cleaned up")
+    except Exception as e:
+        _log.error(f"Cleanup error: {e}")
 
 
-app = FastAPI(title="ODIN Gateway", version="0.0.6", lifespan=_lifespan)
+app = FastAPI(
+    title="ODIN Protocol Gateway", 
+    version="1.0.0",
+    description="""
+# ODIN Protocol - The Enterprise AI Intranet
+
+**Secure, verifiable, and compliant AI-to-AI communication platform**
+
+## 🚀 Key Features
+
+- **🔒 Zero-Trust Security**: Cryptographic proof chains, HTTP signatures
+- **🏢 Multi-Tenant**: Complete isolation with quota management  
+- **💰 Enterprise Ready**: Bridge Pro payment processing, Research Engine
+- **📊 Full Observability**: Prometheus metrics, distributed tracing
+
+## 🏗️ Core Services
+
+### Bridge Pro Payment Processing
+Enterprise-grade ISO 20022 payment transformation with approval workflows.
+
+### Research Engine  
+Multi-tenant AI experimentation platform with secure BYOM integration.
+
+### SFT Translation
+Semantic Format Transformation with advanced validation and linting.
+
+## 📋 Authentication
+
+Most endpoints require either:
+- **HTTP Signatures**: For service-to-service communication
+- **Admin Tokens**: For administrative operations  
+- **BYOM Tokens**: For playground access (15-minute TTL)
+
+## 🔗 Related Links
+
+- [Documentation](https://odin-protocol.com/docs)
+- [SDK Examples](https://github.com/Maverick0351a/ODINAIMESH/tree/main/packages/sdk)
+- [Enterprise Sales](mailto:enterprise@odin-protocol.com)
+    """,
+    lifespan=_lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+    swagger_ui_parameters={
+        "deepLinking": True,
+        "displayRequestDuration": True,
+        "docExpansion": "list",
+        "operationsSorter": "method",
+        "filter": True,
+        "showExtensions": True,
+        "showCommonExtensions": True,
+        "tryItOutEnabled": True
+    }
+)
 # Initialize optional tracing after app is created so FastAPIInstrumentor can hook
 _maybe_init_tracing()
 
@@ -210,6 +317,22 @@ if (os.getenv("ODIN_HTTP_SIGN_ENFORCE_ROUTES", "").strip()):
 # Enable response signing only when ODIN_SIGN_ROUTES is set to non-empty
 if (os.getenv("ODIN_SIGN_ROUTES", "").strip()):
     app.add_middleware(ResponseSigningMiddleware)
+
+# Enhanced HEL Middleware with RTN and Federation integration
+try:
+    from gateway.middleware.enhanced_hel import EnhancedHELMiddleware, build_hel_config
+    
+    hel_config = build_hel_config(
+        realm=os.getenv("ODIN_REALM", "default"),
+        rtn_enabled=os.getenv("ODIN_RTN_ENABLED", "true").lower() == "true",
+        federation_enabled=os.getenv("ODIN_FEDERATION_ENABLED", "true").lower() == "true",
+        default_unit_type=os.getenv("ODIN_DEFAULT_UNIT_TYPE", "compute_units")
+    )
+    
+    app.add_middleware(EnhancedHELMiddleware, hel_config=hel_config)
+except ImportError:
+    pass
+
 # Always add discovery last so it can observe and augment final headers
 app.add_middleware(ProofDiscoveryMiddleware)
 # Include the transform receipts router BEFORE the generic receipts router to avoid
@@ -244,6 +367,28 @@ app.include_router(billing_router)
 app.include_router(stripe_webhook_router)
 if hop_index_router is not None:
     app.include_router(hop_index_router)
+
+# Strategic Bet Endpoints
+# 1. RTN (Receipts Transparency Network)
+try:
+    from apps.gateway.rtn import router as rtn_router
+    app.include_router(rtn_router)
+except ImportError:
+    pass
+
+# 2. Federation & Settlement
+try:
+    from apps.gateway.federation import router as federation_router
+    app.include_router(federation_router)
+except ImportError:
+    pass
+
+# 3. Payments Bridge Pro
+try:
+    from apps.gateway.payments import router as payments_router
+    app.include_router(payments_router)
+except ImportError:
+    pass
 
 # simple metrics are provided by apps.gateway.metrics (REG, REQS, LAT)
 
@@ -554,4 +699,184 @@ def odin_core_semantics_v0_1():
 
 
 # Discovery endpoint moved to apps.gateway.discovery router
+
+
+# Enhanced health checks for monitoring
+@app.get("/health/detailed")
+async def detailed_health_check():
+    """Comprehensive health check including all enhanced systems."""
+    async with trace_operation("health_check", {"type": "detailed"}):
+        health_status = {
+            "status": "healthy",
+            "timestamp": time.time(),
+            "components": {}
+        }
+        
+        overall_healthy = True
+        
+        # Cache health
+        try:
+            cache_health = await cache_health_check()
+            health_status["components"]["cache"] = cache_health
+            if cache_health["status"] not in ["healthy", "degraded"]:
+                overall_healthy = False
+        except Exception as e:
+            health_status["components"]["cache"] = {"status": "error", "message": str(e)}
+            overall_healthy = False
+            
+        # Connection pool health
+        try:
+            conn_health = await connection_health_check()
+            health_status["components"]["connections"] = conn_health
+            if conn_health["status"] not in ["healthy", "degraded"]:
+                overall_healthy = False
+        except Exception as e:
+            health_status["components"]["connections"] = {"status": "error", "message": str(e)}
+            overall_healthy = False
+            
+        # Security systems health
+        try:
+            security_health = await security_health_check()
+            health_status["components"]["security"] = security_health
+            if security_health["status"] not in ["healthy", "degraded"]:
+                overall_healthy = False
+        except Exception as e:
+            health_status["components"]["security"] = {"status": "error", "message": str(e)}
+            overall_healthy = False
+            
+        # Migration system health
+        try:
+            if hasattr(app.state, 'migration_manager'):
+                migration_status = await app.state.migration_manager.get_migration_status()
+                health_status["components"]["migrations"] = {
+                    "status": "healthy",
+                    "current_version": migration_status.get("current_version"),
+                    "pending_migrations": len(migration_status.get("pending_migrations", []))
+                }
+        except Exception as e:
+            health_status["components"]["migrations"] = {"status": "error", "message": str(e)}
+            
+        # Set overall status
+        if not overall_healthy:
+            health_status["status"] = "degraded"
+            
+        return health_status
+
+
+@app.get("/metrics/security")
+async def security_metrics():
+    """Get security metrics for monitoring."""
+    async with trace_operation("security_metrics"):
+        try:
+            audit_logger = get_audit_logger()
+            rate_limiter = get_rate_limiter()
+            cert_pinner = get_certificate_pinner()
+            
+            return {
+                "security_events": audit_logger.get_security_metrics(),
+                "rate_limiting": rate_limiter.get_rate_limit_stats(),
+                "certificate_pinning": cert_pinner.get_violation_stats(),
+                "timestamp": time.time()
+            }
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Metrics error: {e}")
+
+
+@app.get("/metrics/performance")
+async def performance_metrics():
+    """Get performance metrics."""
+    async with trace_operation("performance_metrics"):
+        try:
+            performance_data = {
+                "timestamp": time.time(),
+                "request_metrics": {
+                    "total_requests": REG.get_sample_value("odin_gateway_requests_total") or 0,
+                    "request_latency_avg": REG.get_sample_value("odin_gateway_request_duration_seconds_sum") / max(REG.get_sample_value("odin_gateway_request_duration_seconds_count") or 1, 1)
+                }
+            }
+            
+            # Add cache stats if available
+            if hasattr(app.state, 'cache_managers'):
+                cache_health = await cache_health_check()
+                performance_data["cache"] = cache_health.get("stats", {})
+                
+            # Add connection pool stats
+            if hasattr(app.state, 'pool_manager'):
+                conn_health = await connection_health_check()
+                performance_data["connections"] = conn_health.get("stats", {})
+                
+            return performance_data
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Performance metrics error: {e}")
+
+
+# Enhanced middleware for security and monitoring
+@app.middleware("http")
+async def enhanced_security_middleware(request: Request, call_next):
+    """Enhanced security middleware with rate limiting and audit logging."""
+    start_time = time.time()
+    
+    # Get client IP
+    client_ip = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent")
+    
+    # Rate limiting
+    try:
+        rate_limiter = get_rate_limiter()
+        
+        # Determine rate limit rule based on endpoint
+        rule_type = "default"
+        if request.url.path.startswith("/bridge-pro"):
+            rule_type = "bridge_pro"
+        elif request.url.path.startswith("/research"):
+            rule_type = "research"
+        elif request.headers.get("authorization"):
+            rule_type = "api_key"
+            
+        if not rate_limiter.is_allowed(client_ip, rule_type):
+            # Log rate limit violation
+            await log_security_event(SecurityEvent(
+                event_type="rate_limit_exceeded",
+                severity=SecurityLevel.MEDIUM,
+                timestamp=datetime.utcnow(),
+                source_ip=client_ip,
+                user_agent=user_agent,
+                details={"rule_type": rule_type, "path": request.url.path},
+                action_taken="request_blocked"
+            ))
+            raise HTTPException(status_code=429, detail="Rate limit exceeded")
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        _log.error(f"Rate limiting error: {e}")
+        
+    # Process request
+    response = await call_next(request)
+    
+    # Add security headers
+    security_headers = create_security_headers()
+    for header, value in security_headers.items():
+        response.headers[header] = value
+        
+    # Log suspicious activity
+    if response.status_code >= 400:
+        await log_security_event(SecurityEvent(
+            event_type="http_error",
+            severity=SecurityLevel.LOW if response.status_code < 500 else SecurityLevel.MEDIUM,
+            timestamp=datetime.utcnow(),
+            source_ip=client_ip,
+            user_agent=user_agent,
+            details={
+                "status_code": response.status_code,
+                "path": request.url.path,
+                "method": request.method
+            }
+        ))
+        
+    # Update metrics
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    
+    return response
 

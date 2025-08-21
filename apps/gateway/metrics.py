@@ -205,6 +205,25 @@ vai_requests_total = MET_VAI_REQUESTS
 # SBOM metrics aliases  
 sbom_headers_total = MET_SBOM_HEADERS
 
+# Bridge Pro metrics aliases
+BRIDGE_EXEC_TOTAL = MET_BRIDGE_EXEC_TOTAL
+BRIDGE_EXEC_DURATION = MET_BRIDGE_EXEC_DURATION
+BRIDGE_APPROVAL_PENDING = MET_BRIDGE_APPROVAL_PENDING
+ISO20022_VALIDATE_FAIL_TOTAL = MET_ISO20022_VALIDATE_FAIL_TOTAL
+
+def record_bridge_execution(result: str, source_format: str, target_format: str, duration_ms: float):
+    """Record bridge execution metrics"""
+    BRIDGE_EXEC_TOTAL.labels(
+        result=result,
+        source_format=source_format,
+        target_format=target_format
+    ).inc()
+    
+    BRIDGE_EXEC_DURATION.labels(
+        source_format=source_format,
+        target_format=target_format
+    ).observe(duration_ms)
+
 # Include aliases in exports
 __all__ += [
     "transform_receipts_total",
@@ -223,4 +242,9 @@ __all__ += [
     "tenant_quota_blocked_total",
     "vai_requests_total",
     "sbom_headers_total",
+    "BRIDGE_EXEC_TOTAL",
+    "BRIDGE_EXEC_DURATION", 
+    "BRIDGE_APPROVAL_PENDING",
+    "ISO20022_VALIDATE_FAIL_TOTAL",
+    "record_bridge_execution",
 ]

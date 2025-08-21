@@ -393,3 +393,36 @@ class BridgeEngine:
         # In a real implementation, this would update approval status in database
         print(f"Processing approval {approval_id}: {decision} - {reason}")
         return decision.lower() == "approved"
+
+
+@dataclass
+class ApprovalDecision:
+    """Approval decision data."""
+    approval_id: str
+    decision: str  # "approved" or "rejected"
+    reason: str = ""
+    approver_id: str = ""
+
+
+@dataclass
+class ApprovalResponse:
+    """Response from approval processing."""
+    approval_id: str
+    status: str
+    processed_at: datetime
+    decision: Optional[str] = None
+
+
+class BridgeExecutionStatus(str, Enum):
+    """Bridge execution status values."""
+    PENDING = "pending"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    REQUIRES_APPROVAL = "requires_approval"
+
+
+# Factory function for getting bridge engine instance
+def get_bridge_engine(config: Optional[Dict[str, Any]] = None) -> BridgeEngine:
+    """Get a configured bridge engine instance."""
+    return BridgeEngine(config or {})

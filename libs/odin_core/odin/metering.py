@@ -389,3 +389,57 @@ async def auto_report_stripe_usage(receipt: Dict[str, Any], tenant_id: str) -> O
     """Convenience function to auto-report usage to Stripe"""
     service = get_metering_service()
     return await service.report_usage_to_stripe(receipt, tenant_id)
+
+def track_billable_event(event_type: str, 
+                         tenant_id: str, 
+                         amount: float, 
+                         metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Track a billable event for revenue reporting and analytics"""
+    import time
+    from datetime import datetime, timezone
+    
+    event_data = {
+        "event_id": f"{event_type}_{tenant_id}_{int(time.time() * 1000)}",
+        "event_type": event_type,
+        "tenant_id": tenant_id,
+        "amount": amount,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "metadata": metadata or {}
+    }
+    
+    # In production, this would be sent to analytics/billing system
+    # For now, return the event data for logging
+    return event_data
+
+def get_usage_metrics(tenant_id: Optional[str] = None, 
+                      start_date: Optional[str] = None,
+                      end_date: Optional[str] = None) -> Dict[str, Any]:
+    """Get usage metrics for billing and analytics"""
+    from datetime import datetime, timezone, timedelta
+    
+    if not start_date:
+        start_date = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+    if not end_date:
+        end_date = datetime.now(timezone.utc).isoformat()
+    
+    # Mock metrics data - in production this would query the actual usage database
+    metrics = {
+        "tenant_id": tenant_id,
+        "period": {
+            "start": start_date,
+            "end": end_date
+        },
+        "usage_summary": {
+            "total_requests": 0,
+            "total_tokens": 0,
+            "total_cost": 0.0,
+            "services_used": []
+        },
+        "billing_summary": {
+            "billable_events": 0,
+            "total_revenue": 0.0,
+            "currency": "USD"
+        }
+    }
+    
+    return metrics

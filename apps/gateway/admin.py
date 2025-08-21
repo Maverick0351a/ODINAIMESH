@@ -31,6 +31,14 @@ def _require_admin(request: Request):
         raise HTTPException(status_code=401, detail="admin token invalid")
 
 
+def require_admin_key(request: Request):
+    """
+    Public wrapper for admin authentication requirement.
+    Used by bridge_pro router for admin-level enterprise features.
+    """
+    return _require_admin(request)
+
+
 @router.post("/reload/policy", dependencies=[Depends(_require_admin)])
 def admin_reload_policy():
     return reload_policy()

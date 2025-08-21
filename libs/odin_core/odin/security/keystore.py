@@ -175,3 +175,36 @@ def ensure_keystore_file(path: str) -> tuple[Dict[str, OpeKeypair], str]:
     active = kp.kid
     save_keystore_to_file(path, ks, active)
     return ks, active
+
+
+class KeyStore:
+    """Key management for ODIN security."""
+    
+    def __init__(self, path: str = "odin.keystore.json"):
+        self.path = path
+        try:
+            self._keystore, self._active_kid = ensure_keystore_file(path)
+        except Exception:
+            self._keystore = {}
+            self._active_kid = None
+    
+    @property
+    def active_keypair(self):
+        """Get the active keypair."""
+        if self._active_kid and self._active_kid in self._keystore:
+            return self._keystore[self._active_kid]
+        return None
+    
+    def get_keypair(self, kid: str):
+        """Get a specific keypair by kid."""
+        return self._keystore.get(kid)
+
+
+def create_keystore(path: str = "odin.keystore.json"):
+    """Create a new keystore instance."""
+    return KeyStore(path)
+
+
+def get_keystore():
+    """Get the default keystore instance."""
+    return create_keystore()

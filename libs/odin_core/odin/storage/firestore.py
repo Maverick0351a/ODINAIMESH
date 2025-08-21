@@ -39,6 +39,16 @@ class FirestoreStorage:
         self.agents = self.db.collection("odin_agents")
         self.receipts = self.db.collection("odin_receipts")
         
+        # Strategic Business Collections (Added Aug 20, 2025)
+        self.rtn_entries = self.db.collection("odin_rtn_entries")
+        self.rtn_day_roots = self.db.collection("odin_rtn_day_roots")
+        self.federation_passes = self.db.collection("odin_federation_passes")
+        self.federation_usage = self.db.collection("odin_federation_usage")
+        self.federation_settlements = self.db.collection("odin_federation_settlements")
+        self.payments_bridge_executions = self.db.collection("odin_payments_executions")
+        self.payments_bridge_approvals = self.db.collection("odin_payments_approvals")
+        self.payments_bridge_audit = self.db.collection("odin_payments_audit")
+        
         # Rate limiting cache (in-memory for performance)
         self.rate_limits: Dict[str, List[float]] = {}
     
@@ -291,6 +301,132 @@ class FirestoreStorage:
         # Add current request
         self.rate_limits[key].append(now)
         return False
+
+    # Strategic Business Storage Methods (Added Aug 20, 2025)
+    
+    async def store_rtn_entry(self, entry_data: Dict[str, Any]) -> bool:
+        """Store RTN transparency log entry."""
+        try:
+            entry_id = entry_data.get("trace_id", f"rtn_{secrets.token_urlsafe(8)}")
+            doc_data = {
+                **entry_data,
+                "created_at": datetime.utcnow(),
+                "day": entry_data.get("timestamp", datetime.utcnow()).strftime("%Y-%m-%d")
+            }
+            self.rtn_entries.document(entry_id).set(doc_data)
+            return True
+        except Exception as e:
+            print(f"Failed to store RTN entry: {e}")
+            return False
+    
+    async def store_rtn_day_root(self, date: str, root_data: Dict[str, Any]) -> bool:
+        """Store RTN daily root hash."""
+        try:
+            doc_data = {
+                **root_data,
+                "date": date,
+                "created_at": datetime.utcnow()
+            }
+            self.rtn_day_roots.document(date).set(doc_data)
+            return True
+        except Exception as e:
+            print(f"Failed to store RTN day root: {e}")
+            return False
+    
+    async def get_rtn_entries_for_date(self, date: str) -> List[Dict[str, Any]]:
+        """Get RTN entries for a specific date."""
+        query = self.rtn_entries.where("day", "==", date).order_by("created_at")
+        entries = []
+        for doc in query.stream():
+            data = doc.to_dict()
+            data["id"] = doc.id
+            entries.append(data)
+        return entries
+    
+    async def store_federation_pass(self, pass_data: Dict[str, Any]) -> str:
+        """Store federation roaming pass."""
+        pass_id = f"pass_{secrets.token_urlsafe(12)}"
+        doc_data = {
+            **pass_data,
+            "created_at": datetime.utcnow(),
+            "status": "active"
+        }
+        self.federation_passes.document(pass_id).set(doc_data)
+        return pass_id
+    
+    async def store_federation_usage(self, usage_data: Dict[str, Any]) -> bool:
+        """Store federation usage for billing."""
+        try:
+            usage_id = f"usage_{secrets.token_urlsafe(8)}"
+            doc_data = {
+                **usage_data,
+                "recorded_at": datetime.utcnow(),
+                "billing_month": datetime.utcnow().strftime("%Y-%m")
+            }
+            self.federation_usage.document(usage_id).set(doc_data)
+            return True
+        except Exception as e:
+            print(f"Failed to store federation usage: {e}")
+            return False
+    
+    async def get_federation_usage(self, pass_id: str, month: str) -> List[Dict[str, Any]]:
+        """Get federation usage for billing period."""
+        query = (self.federation_usage
+                .where("pass_id", "==", pass_id)
+                .where("billing_month", "==", month))
+        
+        usage = []
+        for doc in query.stream():
+            data = doc.to_dict()
+            data["id"] = doc.id
+            usage.append(data)
+        return usage
+    
+    async def store_payments_execution(self, execution_data: Dict[str, Any]) -> str:
+        """Store Bridge Pro payment execution."""
+        execution_id = f"exec_{secrets.token_urlsafe(12)}"
+        doc_data = {
+            **execution_data,
+            "created_at": datetime.utcnow(),
+            "status": "pending"
+        }
+        self.payments_bridge_executions.document(execution_id).set(doc_data)
+        return execution_id
+    
+    async def update_payments_execution(self, execution_id: str, update_data: Dict[str, Any]) -> bool:
+        """Update payment execution status."""
+        try:
+            update_data["updated_at"] = datetime.utcnow()
+            self.payments_bridge_executions.document(execution_id).update(update_data)
+            return True
+        except Exception as e:
+            print(f"Failed to update payment execution: {e}")
+            return False
+    
+    async def store_payments_approval(self, approval_data: Dict[str, Any]) -> str:
+        """Store payment approval workflow."""
+        approval_id = f"appr_{secrets.token_urlsafe(12)}"
+        doc_data = {
+            **approval_data,
+            "created_at": datetime.utcnow(),
+            "status": "pending"
+        }
+        self.payments_bridge_approvals.document(approval_id).set(doc_data)
+        return approval_id
+    
+    async def store_payments_audit(self, audit_data: Dict[str, Any]) -> bool:
+        """Store payment audit trail."""
+        try:
+            audit_id = f"audit_{secrets.token_urlsafe(8)}"
+            doc_data = {
+                **audit_data,
+                "logged_at": datetime.utcnow()
+            }
+            self.payments_bridge_audit.document(audit_id).set(doc_data)
+            return True
+        except Exception as e:
+            print(f"Failed to store payment audit: {e}")
+            return False
 
 
 # Factory function for storage backend

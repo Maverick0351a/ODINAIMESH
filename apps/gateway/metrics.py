@@ -131,6 +131,35 @@ MET_SBOM_HEADERS = Counter(
     registry=REG,
 )
 
+# Bridge Pro metrics for Payments Bridge Pro add-on
+MET_BRIDGE_EXEC_TOTAL = Counter(
+    "odin_bridge_exec_total",
+    "Total bridge executions",
+    ["result", "source_format", "target_format"],
+    registry=REG,
+)
+
+MET_BRIDGE_EXEC_DURATION = Histogram(
+    "odin_bridge_exec_duration_ms",
+    "Bridge execution duration in milliseconds",
+    ["source_format", "target_format"],
+    registry=REG,
+)
+
+MET_BRIDGE_APPROVAL_PENDING = Counter(
+    "odin_approvals_pending_total",
+    "Number of pending approvals",
+    ["approval_type"],
+    registry=REG,
+)
+
+MET_ISO20022_VALIDATE_FAIL_TOTAL = Counter(
+    "odin_iso20022_validate_fail_total",
+    "ISO 20022 validation failures",
+    ["reason", "validator"],
+    registry=REG,
+)
+
 __all__ = [
     "REG",
     "REQS",

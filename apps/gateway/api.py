@@ -44,6 +44,7 @@ from apps.gateway.sft_maps import router as sft_maps_router
 from libs.odin_core.odin.envelope import ProofEnvelope
 from apps.gateway.ledger import router as ledger_router
 from apps.gateway.bridge import router as bridge_router
+from gateway.routers.bridge_pro import router as bridge_pro_router
 from apps.gateway.receipts_transform import receipts_transform_router
 from apps.gateway.receipts_index import router as receipts_index_router
 from apps.gateway.services import services_router
@@ -187,6 +188,7 @@ app.include_router(discovery_router)
 app.include_router(sft_maps_router)
 app.include_router(ledger_router)
 app.include_router(bridge_router)
+app.include_router(bridge_pro_router)
 app.include_router(services_router)
 app.include_router(registry_router)
 app.include_router(admin_router.router)

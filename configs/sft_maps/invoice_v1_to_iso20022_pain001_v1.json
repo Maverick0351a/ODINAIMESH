@@ -1,0 +1,370 @@
+{
+  "name": "invoice_v1_to_iso20022_pain001_v1",
+  "version": "1.0.0",
+  "description": "Transform business invoice to ISO 20022 Credit Transfer Initiation (pain.001)",
+  "source_format": "invoice_v1",
+  "target_format": "iso20022_pain001_v1",
+  "revenue_tier": "bridge_pro",
+  "compliance_level": "banking_grade",
+  "created_at": "2025-08-20T00:00:00Z",
+  "transforms": [
+    {
+      "target": "group_header.message_identification",
+      "source": "invoice.number",
+      "required": true,
+      "fn": "prefix_with_datetime",
+      "fn_args": {"prefix": "INV-"}
+    },
+    {
+      "target": "group_header.creation_date_time",
+      "source": "timestamp",
+      "required": true,
+      "fn": "to_iso8601_utc",
+      "default": "NOW()"
+    },
+    {
+      "target": "group_header.number_of_transactions",
+      "source": "line_items",
+      "required": true,
+      "fn": "count_array",
+      "default": 1
+    },
+    {
+      "target": "group_header.control_sum",
+      "source": "total_amount",
+      "required": true,
+      "fn": "to_minor_units",
+      "validation": "sum_check"
+    },
+    {
+      "target": "group_header.initiating_party.name",
+      "source": "from.name",
+      "required": true,
+      "max_length": 140
+    },
+    {
+      "target": "group_header.initiating_party.identification.organisation_identification.other.identification",
+      "source": "from.tax_id",
+      "required": false
+    },
+    {
+      "target": "payment_information[0].payment_information_identification",
+      "source": "invoice.number",
+      "required": true,
+      "fn": "prefix",
+      "fn_args": {"prefix": "PMT-"}
+    },
+    {
+      "target": "payment_information[0].payment_method",
+      "source": null,
+      "required": true,
+      "default": "TRF",
+      "enum": ["TRF", "CHK", "TRA", "DD"]
+    },
+    {
+      "target": "payment_information[0].batch_booking",
+      "source": null,
+      "required": false,
+      "default": true
+    },
+    {
+      "target": "payment_information[0].number_of_transactions",
+      "source": "line_items",
+      "required": true,
+      "fn": "count_array",
+      "default": 1
+    },
+    {
+      "target": "payment_information[0].control_sum",
+      "source": "total_amount",
+      "required": true,
+      "fn": "to_minor_units"
+    },
+    {
+      "target": "payment_information[0].requested_execution_date",
+      "source": "due_date",
+      "required": true,
+      "fn": "to_iso8601_date",
+      "default": "TODAY()+7"
+    },
+    {
+      "target": "payment_information[0].debtor.name",
+      "source": "from.name",
+      "required": true,
+      "max_length": 140
+    },
+    {
+      "target": "payment_information[0].debtor_account.identification.iban",
+      "source": "from.bank_account.iban",
+      "required": true,
+      "validation": "iban_format"
+    },
+    {
+      "target": "payment_information[0].debtor_account.currency",
+      "source": "currency",
+      "required": true,
+      "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD"],
+      "default": "EUR"
+    },
+    {
+      "target": "payment_information[0].debtor_agent.financial_institution_identification.bic",
+      "source": "from.bank_account.bic",
+      "required": false,
+      "validation": "bic_format"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].payment_identification.instruction_identification",
+      "source": "invoice.number",
+      "required": true,
+      "fn": "prefix",
+      "fn_args": {"prefix": "TXN-"}
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].payment_identification.end_to_end_identification",
+      "source": "invoice.number",
+      "required": true,
+      "max_length": 35,
+      "fn": "sanitize_end_to_end"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].instructed_amount.amount",
+      "source": "total_amount",
+      "required": true,
+      "fn": "to_decimal_precision",
+      "validation": "amount_precision"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].instructed_amount.currency",
+      "source": "currency",
+      "required": true,
+      "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD"],
+      "default": "EUR",
+      "validation": "currency_code"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].creditor_agent.financial_institution_identification.bic",
+      "source": "to.bank_account.bic",
+      "required": true,
+      "validation": "bic_format"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].creditor.name",
+      "source": "to.name",
+      "required": true,
+      "max_length": 140
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].creditor_account.identification.iban",
+      "source": "to.bank_account.iban",
+      "required": true,
+      "validation": "iban_format"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].remittance_information.unstructured",
+      "source": "description",
+      "required": false,
+      "max_length": 140,
+      "default": "Invoice Payment"
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].remittance_information.structured.creditor_reference_information.reference",
+      "source": "invoice.number",
+      "required": false,
+      "max_length": 35
+    },
+    {
+      "target": "payment_information[0].credit_transfer_transaction_information[0].purpose.code",
+      "source": "payment_purpose",
+      "required": false,
+      "enum": ["CBFF", "CHAR", "COMC", "CPKC", "DIVI", "GOVI", "GSTP", "INST", "INTC", "LIMA", "OTHR", "RLTP", "SALA", "SECU", "SSBE", "SUPP", "TAXS", "TRAD", "TREA", "VATX", "WHLD"],
+      "default": "SUPP"
+    }
+  ],
+  "functions": {
+    "prefix_with_datetime": {
+      "description": "Prefix value with datetime and given prefix",
+      "implementation": "datetime.now().strftime('%Y%m%d') + '-' + args['prefix'] + value"
+    },
+    "to_iso8601_utc": {
+      "description": "Convert timestamp to ISO 8601 UTC format",
+      "implementation": "datetime.fromisoformat(value).astimezone(timezone.utc).isoformat()"
+    },
+    "count_array": {
+      "description": "Count items in array",
+      "implementation": "len(value) if isinstance(value, list) else 1"
+    },
+    "to_minor_units": {
+      "description": "Convert decimal amount to minor units for currency",
+      "implementation": "int(Decimal(str(value)) * 100)"
+    },
+    "to_iso8601_date": {
+      "description": "Convert to ISO 8601 date format",
+      "implementation": "datetime.fromisoformat(value).date().isoformat()"
+    },
+    "to_decimal_precision": {
+      "description": "Format decimal to currency precision",
+      "implementation": "f'{Decimal(str(value)):.2f}'"
+    },
+    "sanitize_end_to_end": {
+      "description": "Sanitize End-to-End ID for ISO 20022",
+      "implementation": "re.sub(r'[^A-Za-z0-9\\-\\.\\?\\:\\(\\)\\+\\'\\/ ]', '', value)[:35]"
+    },
+    "prefix": {
+      "description": "Add prefix to value",
+      "implementation": "args['prefix'] + str(value)"
+    }
+  },
+  "validations": {
+    "iban_format": {
+      "description": "Validate IBAN format",
+      "validator": "iso20022.validate_iban",
+      "severity": "error"
+    },
+    "bic_format": {
+      "description": "Validate BIC/SWIFT format",
+      "validator": "iso20022.validate_bic",
+      "severity": "error"
+    },
+    "currency_code": {
+      "description": "Validate ISO 4217 currency code",
+      "validator": "iso20022.validate_currency",
+      "severity": "error"
+    },
+    "amount_precision": {
+      "description": "Validate amount precision for currency",
+      "validator": "iso20022.validate_amount_precision",
+      "severity": "error"
+    },
+    "sum_check": {
+      "description": "Validate sum totals match",
+      "validator": "iso20022.validate_sum_check",
+      "severity": "error"
+    }
+  },
+  "defaults": {
+    "NOW()": "datetime.now(timezone.utc).isoformat()",
+    "TODAY()": "datetime.now().date().isoformat()",
+    "TODAY()+7": "(datetime.now() + timedelta(days=7)).date().isoformat()"
+  },
+  "metadata": {
+    "iso20022_message_type": "pain.001.001.12",
+    "schema_version": "2023",
+    "namespace": "urn:iso:std:iso:20022:tech:xsd:pain.001.001.12",
+    "business_domain": "Payments",
+    "message_definition": "CustomerCreditTransferInitiation",
+    "coverage_target": 95.0,
+    "billable_event": "bridge_execute_success",
+    "revenue_category": "bridge_pro"
+  },
+  "example_input": {
+    "invoice": {
+      "number": "INV-2023-001234"
+    },
+    "description": "Professional services Q4 2023",
+    "total_amount": "2500.00",
+    "currency": "EUR",
+    "due_date": "2023-12-31",
+    "from": {
+      "name": "ACME Corporation",
+      "tax_id": "DE123456789",
+      "bank_account": {
+        "iban": "DE89370400440532013000",
+        "bic": "COBADEFFXXX"
+      }
+    },
+    "to": {
+      "name": "Professional Services Ltd",
+      "bank_account": {
+        "iban": "GB29NWBK60161331926819",
+        "bic": "NWBKGB2L"
+      }
+    },
+    "line_items": [
+      {
+        "description": "Consulting services",
+        "quantity": 100,
+        "unit_price": "25.00",
+        "total": "2500.00"
+      }
+    ],
+    "payment_purpose": "SUPP"
+  },
+  "example_output": {
+    "group_header": {
+      "message_identification": "20231225-INV-INV-2023-001234",
+      "creation_date_time": "2023-12-25T14:30:45.123Z",
+      "number_of_transactions": 1,
+      "control_sum": 250000,
+      "initiating_party": {
+        "name": "ACME Corporation",
+        "identification": {
+          "organisation_identification": {
+            "other": {
+              "identification": "DE123456789"
+            }
+          }
+        }
+      }
+    },
+    "payment_information": [
+      {
+        "payment_information_identification": "PMT-INV-2023-001234",
+        "payment_method": "TRF",
+        "batch_booking": true,
+        "number_of_transactions": 1,
+        "control_sum": 250000,
+        "requested_execution_date": "2023-12-31",
+        "debtor": {
+          "name": "ACME Corporation"
+        },
+        "debtor_account": {
+          "identification": {
+            "iban": "DE89370400440532013000"
+          },
+          "currency": "EUR"
+        },
+        "debtor_agent": {
+          "financial_institution_identification": {
+            "bic": "COBADEFFXXX"
+          }
+        },
+        "credit_transfer_transaction_information": [
+          {
+            "payment_identification": {
+              "instruction_identification": "TXN-INV-2023-001234",
+              "end_to_end_identification": "INV-2023-001234"
+            },
+            "instructed_amount": {
+              "amount": "2500.00",
+              "currency": "EUR"
+            },
+            "creditor_agent": {
+              "financial_institution_identification": {
+                "bic": "NWBKGB2L"
+              }
+            },
+            "creditor": {
+              "name": "Professional Services Ltd"
+            },
+            "creditor_account": {
+              "identification": {
+                "iban": "GB29NWBK60161331926819"
+              }
+            },
+            "remittance_information": {
+              "unstructured": "Professional services Q4 2023",
+              "structured": {
+                "creditor_reference_information": {
+                  "reference": "INV-2023-001234"
+                }
+              }
+            },
+            "purpose": {
+              "code": "SUPP"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

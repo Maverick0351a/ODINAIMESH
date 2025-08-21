@@ -1,0 +1,126 @@
+# ODIN Research Engine - Docker Compose for Local Development
+
+version: '3.8'
+
+services:
+  # ODIN Gateway with Research Engine
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.research
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      - ODIN_GATEWAY_PORT=8080
+      - ODIN_LOG_LEVEL=DEBUG
+      - ODIN_RESEARCH_ENABLED=true
+      - ODIN_EXPERIMENT_ENABLED=true
+      - ODIN_BENCH_ENABLED=true
+      - DATABASE_URL=postgresql://odin:odin@postgres:5432/odin_research
+      - REDIS_URL=redis://redis:6379/0
+      - ODIN_HEL_CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+    volumes:
+      - ./bench:/app/bench
+      - ./config:/app/config
+      - ./tmp:/app/tmp
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - odin-network
+
+  # Documentation site with Research Engine integration
+  docs:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_ODIN_GATEWAY_URL=http://localhost:8080
+      - NODE_ENV=development
+    volumes:
+      - ./docs:/app
+      - /app/node_modules
+    networks:
+      - odin-network
+
+  # PostgreSQL for persistent storage
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=odin_research
+      - POSTGRES_USER=odin
+      - POSTGRES_PASSWORD=odin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - odin-network
+
+  # Redis for caching and session storage
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - odin-network
+
+  # IPFS for receipt storage
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8081:8080"
+    volumes:
+      - ipfs_data:/data/ipfs
+    networks:
+      - odin-network
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - odin-network
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=odin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana:/etc/grafana/provisioning
+    networks:
+      - odin-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  ipfs_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  odin-network:
+    driver: bridge

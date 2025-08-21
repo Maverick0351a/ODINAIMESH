@@ -1,0 +1,86 @@
+# ODIN-Bench Translation Test Cases
+# Defines test scenarios for SFT map validation
+
+test_cases:
+  - name: "Invoice to ISO 20022 pain.001"
+    map_id: "invoice_v1->iso20022_pain001_v1"
+    realm: "business"
+    input_files: "bench/data/translation/business/*.json"
+    expected_files: "bench/data/expected/iso20022_pain001_v1/*.json"
+    
+    # Coverage requirements
+    coverage:
+      required_fields: ["amount", "currency", "vendor.iban", "buyer.account"]
+      optional_fields: ["description", "due_date", "reference"]
+      
+    # Property tests
+    invariants:
+      # IBAN format validation
+      - field: "vendor.iban"
+        validator: "iban_checksum"
+        error_on_fail: true
+        
+      # Currency code validation  
+      - field: "currency"
+        validator: "iso4217_currency"
+        allowed: ["EUR", "USD", "GBP", "CHF", "JPY"]
+        
+      # Amount precision
+      - field: "amount"
+        validator: "decimal_precision"
+        max_decimals: 2
+        min_value: 0.01
+        
+      # BIC format
+      - field: "vendor.bic"
+        validator: "bic_format"
+        pattern: "^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$"
+
+    # Round-trip validation
+    round_trip:
+      enabled: true
+      tolerance: 0.01  # for amount comparisons
+      
+    # Performance targets
+    performance:
+      max_time_ms: 50
+      p95_target_ms: 35
+      
+# Governance test cases      
+governance_cases:
+  - name: "PII Detection"
+    rules: "configs/hel/pii_detection.yaml"
+    test_inputs:
+      - text: "SSN: 123-45-6789"
+        expected: "DENY"
+        reason: "contains_ssn"
+      - text: "Email: user@company.com" 
+        expected: "REDACT"
+        fields: ["email"]
+      - text: "Invoice amount: $5000"
+        expected: "ALLOW"
+        
+  - name: "Content Size Limits"
+    rules: "configs/hel/size_limits.yaml"
+    test_inputs:
+      - size_bytes: 1024
+        expected: "ALLOW"
+      - size_bytes: 1048576  # 1MB
+        expected: "DENY"
+        reason: "payload_too_large"
+
+# Receipt continuity tests        
+receipt_tests:
+  - name: "Chain Continuity"
+    scenarios:
+      - trace_id: "test-trace-001"
+        expected_hops: 3
+        services: ["gateway", "relay", "target"]
+        
+      - trace_id: "test-trace-002" 
+        expected_hops: 2
+        services: ["gateway", "relay"]
+        
+    targets:
+      continuity_pct: 99.9
+      missing_hops_max: 0

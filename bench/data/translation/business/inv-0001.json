@@ -1,0 +1,18 @@
+{
+  "case_id": "inv-0001",
+  "invoice_id": "INV-2024-001", 
+  "amount": 5000.00,
+  "currency": "EUR",
+  "vendor": {
+    "name": "ACME Software GmbH",
+    "iban": "DE89370400440532013000",
+    "bic": "COBADEFFXXX"
+  },
+  "buyer": {
+    "name": "TechCorp Ltd",
+    "account": "FR1420041010050500013M02606",
+    "reference": "PO-2024-Q1"
+  },
+  "due_date": "2024-02-15",
+  "description": "Software licensing Q1 2024"
+}

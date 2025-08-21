@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, Request, Response, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from pydantic import BaseModel
 import orjson
@@ -63,6 +64,11 @@ from apps.gateway.streaming import stream_router
 from billing.routes import router as billing_router
 from billing.webhooks import router as stripe_webhook_router
 from apps.gateway.pack_loader import realm_pack_loader
+# BYOM Playground routers
+from gateway.routers.byok import router as byok_router
+from gateway.routers.demo import router as demo_router
+# Research Engine router
+from gateway.routers.research import router as research_router
 try:
     from libs.odin_core.odin.hop_index import router as hop_index_router  # type: ignore
 except Exception:
@@ -159,6 +165,36 @@ async def _lifespan(app: FastAPI):
 app = FastAPI(title="ODIN Gateway", version="0.0.6", lifespan=_lifespan)
 # Initialize optional tracing after app is created so FastAPIInstrumentor can hook
 _maybe_init_tracing()
+
+# Configure CORS for production deployment
+import os
+ODIN_ENVIRONMENT = os.getenv("ODIN_ENVIRONMENT", "development")
+if ODIN_ENVIRONMENT == "production":
+    # Production CORS: Restrict to actual production origins
+    allowed_origins = [
+        "https://odin-site-[random-suffix]-uc.a.run.app",  # Will be updated by CI/CD
+        "https://odin-gateway-[random-suffix]-uc.a.run.app"
+    ]
+else:
+    # Development CORS: Allow common development origins
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080"
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+)
+
 # Attach tenant middleware early so downstream sees tenant_id on request.state
 app.add_middleware(TenantMiddleware)
 # Enforce per-tenant monthly quotas if configured
@@ -199,6 +235,11 @@ app.include_router(vai_admin_router)
 # 0.9.0-beta: Optional streaming endpoints
 if os.getenv("ODIN_STREAMING_ENABLED", "0") != "0":
     app.include_router(stream_router)
+# BYOM Playground endpoints
+app.include_router(byok_router)
+app.include_router(demo_router)
+# Research Engine endpoints
+app.include_router(research_router)
 app.include_router(billing_router)
 app.include_router(stripe_webhook_router)
 if hop_index_router is not None:

@@ -1,0 +1,210 @@
+name: Deploy ODIN to Google Cloud Run
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  REGION: us-central1
+  REPO: odin
+  GATEWAY_SVC: odin-gateway
+  RELAY_SVC: odin-relay
+  SITE_SVC: odin-site
+  TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "project_id=${{ secrets.GCP_PROJECT_ID_PROD }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "project_id=${{ secrets.GCP_PROJECT_ID_PROD }}" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "project_id=${{ secrets.GCP_PROJECT_ID_DEV }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: odin-deployer@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Artifact Registry auth
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build and push Gateway image
+        run: |
+          docker build -f deploy/gateway/Dockerfile \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/gateway:${{ env.TAG }} \
+            .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/gateway:${{ env.TAG }}
+
+      - name: Build and push Relay image
+        run: |
+          docker build -f deploy/relay/Dockerfile \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/relay:${{ env.TAG }} \
+            .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/relay:${{ env.TAG }}
+
+      - name: Build and push Site image
+        run: |
+          # Build VitePress site
+          cd docs
+          npm ci
+          npm run build
+          cd ..
+          
+          # Build container
+          docker build -f deploy/site/Dockerfile \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/site:${{ env.TAG }} \
+            .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/site:${{ env.TAG }}
+
+      - name: Deploy Relay service
+        run: |
+          gcloud run deploy ${{ env.RELAY_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/relay:${{ env.TAG }} \
+            --allow-unauthenticated \
+            --service-account odin-relay@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com \
+            --set-env-vars ODIN_STREAM_ENABLED=false \
+            --set-env-vars GOOGLE_CLOUD_PROJECT=${{ steps.env.outputs.project_id }} \
+            --memory 512Mi \
+            --cpu 1 \
+            --concurrency 60 \
+            --min-instances 0 \
+            --max-instances 10 \
+            --timeout 300
+
+      - name: Deploy Gateway service
+        run: |
+          RELAY_URL=$(gcloud run services describe ${{ env.RELAY_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          gcloud run deploy ${{ env.GATEWAY_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/gateway:${{ env.TAG }} \
+            --allow-unauthenticated \
+            --service-account odin-gateway@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com \
+            --set-env-vars ODIN_RELAY_BASE=$RELAY_URL \
+            --set-env-vars ODIN_REALM_PACK_URI=gs://${{ steps.env.outputs.project_id }}-realm-packs/realms/business-0.9.0.tgz \
+            --set-env-vars GOOGLE_CLOUD_PROJECT=${{ steps.env.outputs.project_id }} \
+            --set-env-vars FIRESTORE_DATABASE=(default) \
+            --set-env-vars ODIN_RESEARCH_ENABLED=true \
+            --set-env-vars ODIN_BRIDGE_PRO_ENABLED=true \
+            --set-secrets ODIN_ADMIN_KEY=ODIN_ADMIN_KEY:latest \
+            --memory 1024Mi \
+            --cpu 1 \
+            --concurrency 60 \
+            --min-instances 0 \
+            --max-instances 20 \
+            --timeout 300
+
+      - name: Deploy Site service
+        run: |
+          GATEWAY_URL=$(gcloud run services describe ${{ env.GATEWAY_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          gcloud run deploy ${{ env.SITE_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ steps.env.outputs.project_id }}/${{ env.REPO }}/site:${{ env.TAG }} \
+            --allow-unauthenticated \
+            --service-account odin-site@${{ steps.env.outputs.project_id }}.iam.gserviceaccount.com \
+            --set-env-vars VITE_ODIN_GATEWAY_URL=$GATEWAY_URL \
+            --memory 256Mi \
+            --cpu 0.5 \
+            --concurrency 80 \
+            --min-instances 0 \
+            --max-instances 5 \
+            --timeout 60
+
+      - name: Run smoke tests
+        run: |
+          GATEWAY_URL=$(gcloud run services describe ${{ env.GATEWAY_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          SITE_URL=$(gcloud run services describe ${{ env.SITE_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          echo "Testing Gateway health..."
+          curl -sSf $GATEWAY_URL/health || exit 1
+          
+          echo "Testing Gateway discovery..."
+          curl -sSf $GATEWAY_URL/.well-known/odin/discovery.json || exit 1
+          
+          echo "Testing Gateway metrics..."
+          curl -sSf $GATEWAY_URL/metrics || exit 1
+          
+          echo "Testing Research Engine health..."
+          curl -sSf $GATEWAY_URL/v1/research/health || exit 1
+          
+          echo "Testing Site..."
+          curl -sSf $SITE_URL/ || exit 1
+          
+          echo "✅ All smoke tests passed!"
+          echo "🚀 Deployment URLs:"
+          echo "Gateway: $GATEWAY_URL"
+          echo "Site: $SITE_URL"
+
+      - name: Update CORS configuration
+        if: steps.env.outputs.environment == 'prod'
+        run: |
+          SITE_URL=$(gcloud run services describe ${{ env.SITE_SVC }} \
+            --region ${{ env.REGION }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --format='value(status.url)')
+          
+          # Update Gateway with production CORS settings
+          gcloud run services update ${{ env.GATEWAY_SVC }} \
+            --project ${{ steps.env.outputs.project_id }} \
+            --region ${{ env.REGION }} \
+            --update-env-vars ODIN_CORS_ORIGINS=$SITE_URL
+
+      - name: Deployment summary
+        run: |
+          echo "🎉 ODIN Deployment Complete!"
+          echo "Environment: ${{ steps.env.outputs.environment }}"
+          echo "Project: ${{ steps.env.outputs.project_id }}"
+          echo "Tag: ${{ env.TAG }}"
+          echo ""
+          echo "Services deployed:"
+          gcloud run services list --project ${{ steps.env.outputs.project_id }} --region ${{ env.REGION }} --filter="metadata.name~odin-"

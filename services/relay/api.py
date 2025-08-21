@@ -9,6 +9,7 @@ from typing import Dict
 
 import httpx
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, AnyHttpUrl
 
@@ -70,6 +71,34 @@ def _maybe_init_tracing() -> None:
         pass
 
 _maybe_init_tracing()
+
+# Configure CORS for production deployment
+ODIN_ENVIRONMENT = os.getenv("ODIN_ENVIRONMENT", "development")
+if ODIN_ENVIRONMENT == "production":
+    # Production CORS: Restrict to actual production origins
+    allowed_origins = [
+        "https://odin-site-[random-suffix]-uc.a.run.app",  # Will be updated by CI/CD
+        "https://odin-gateway-[random-suffix]-uc.a.run.app"
+    ]
+else:
+    # Development CORS: Allow common development origins
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080"
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+)
 
 # --- Metrics (optional) ---
 METRICS_ENABLED = os.getenv("ODIN_RELAY_METRICS", "1") != "0"

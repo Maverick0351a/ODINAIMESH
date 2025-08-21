@@ -1,0 +1,55 @@
+{
+  "Document": {
+    "CstmrCdtTrfInitn": {
+      "GrpHdr": {
+        "MsgId": "INV-2024-002",
+        "CreDtTm": "2024-01-16T14:20:00Z",
+        "NbOfTxs": "1", 
+        "CtrlSum": 12500.00,
+        "InitgPty": {
+          "Nm": "MegaCorp International"
+        }
+      },
+      "PmtInf": {
+        "PmtInfId": "PMT-INV-2024-002",
+        "PmtMtd": "TRF",
+        "ReqdExctnDt": "2024-02-28",
+        "Dbtr": {
+          "Nm": "MegaCorp International"
+        },
+        "DbtrAcct": {
+          "Id": {
+            "IBAN": "US89370400440532013001"
+          }
+        },
+        "CdtTrfTxInf": {
+          "PmtId": {
+            "EndToEndId": "INV-2024-002"
+          },
+          "Amt": {
+            "InstdAmt": {
+              "value": 12500.00,
+              "currency": "USD"
+            }
+          },
+          "Cdtr": {
+            "Nm": "Global Consulting Inc"
+          },
+          "CdtrAcct": {
+            "Id": {
+              "IBAN": "GB82WEST12345698765432"
+            }
+          },
+          "CdtrAgt": {
+            "FinInstnId": {
+              "BIC": "WESTGB22XXX"
+            }
+          },
+          "RmtInf": {
+            "Ustrd": "Management consulting services - PROJ-Alpha-2024"
+          }
+        }
+      }
+    }
+  }
+}

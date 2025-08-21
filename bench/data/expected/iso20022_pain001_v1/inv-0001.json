@@ -1,0 +1,55 @@
+{
+  "Document": {
+    "CstmrCdtTrfInitn": {
+      "GrpHdr": {
+        "MsgId": "INV-2024-001",
+        "CreDtTm": "2024-01-15T10:30:00Z",
+        "NbOfTxs": "1",
+        "CtrlSum": 5000.00,
+        "InitgPty": {
+          "Nm": "TechCorp Ltd"
+        }
+      },
+      "PmtInf": {
+        "PmtInfId": "PMT-INV-2024-001", 
+        "PmtMtd": "TRF",
+        "ReqdExctnDt": "2024-02-15",
+        "Dbtr": {
+          "Nm": "TechCorp Ltd"
+        },
+        "DbtrAcct": {
+          "Id": {
+            "IBAN": "FR1420041010050500013M02606"
+          }
+        },
+        "CdtTrfTxInf": {
+          "PmtId": {
+            "EndToEndId": "INV-2024-001"
+          },
+          "Amt": {
+            "InstdAmt": {
+              "value": 5000.00,
+              "currency": "EUR"
+            }
+          },
+          "Cdtr": {
+            "Nm": "ACME Software GmbH"
+          },
+          "CdtrAcct": {
+            "Id": {
+              "IBAN": "DE89370400440532013000"
+            }
+          },
+          "CdtrAgt": {
+            "FinInstnId": {
+              "BIC": "COBADEFFXXX"
+            }
+          },
+          "RmtInf": {
+            "Ustrd": "Software licensing Q1 2024 - PO-2024-Q1"
+          }
+        }
+      }
+    }
+  }
+}

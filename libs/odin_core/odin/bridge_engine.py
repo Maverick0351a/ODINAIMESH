@@ -42,6 +42,17 @@ class ValidationError:
     
     
 @dataclass
+class BridgeExecuteRequest:
+    """Request for bridge execution."""
+    source_data: Dict[str, Any]
+    source_format: str
+    target_format: str
+    tenant_id: str
+    approval_required: bool = False
+    metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
 class BridgeResult:
     """Result of bridge execution."""
     success: bool
@@ -59,6 +70,15 @@ class BridgeResult:
     def __post_init__(self):
         if self.validation_errors is None:
             self.validation_errors = []
+
+
+@dataclass
+class BridgeExecuteResponse:
+    """Response from bridge execution endpoint."""
+    success: bool
+    result: Optional[BridgeResult] = None
+    error_message: str = ""
+    execution_time_ms: float = 0.0
 
 
 class BridgeEngine:

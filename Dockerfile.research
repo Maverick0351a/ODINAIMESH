@@ -1,0 +1,73 @@
+# ODIN Research Engine - Enhanced Dockerfile
+# Multi-stage build for production deployment with Research Engine
+
+FROM python:3.11-slim as builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Install additional dependencies for Research Engine
+RUN pip install --no-cache-dir --user \
+    pytest==7.4.* \
+    redis==4.6.* \
+    asyncpg==0.28.* \
+    pandas==2.1.* \
+    matplotlib==3.7.* \
+    jupyter==1.0.*
+
+# Production stage
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash odin
+
+# Set working directory
+WORKDIR /app
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /home/odin/.local
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/data /app/tmp /app/logs /app/keys \
+    /app/bench/data /app/bench/reports \
+    && chown -R odin:odin /app
+
+# Copy bench data and configuration
+COPY bench/ /app/bench/
+COPY config/ /app/config/
+
+# Set Python path
+ENV PYTHONPATH=/app:/home/odin/.local/lib/python3.11/site-packages
+ENV PATH=/home/odin/.local/bin:$PATH
+
+# Switch to non-root user
+USER odin
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Expose ports
+EXPOSE 8080 8443
+
+# Default command
+CMD ["python", "-m", "uvicorn", "apps.gateway.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]

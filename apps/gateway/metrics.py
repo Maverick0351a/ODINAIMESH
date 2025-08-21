@@ -115,6 +115,22 @@ MET_DYNAMIC_RELOAD = Counter(
     registry=REG,
 )
 
+# VAI (Verifiable Agent Identity) metrics for 0.9.0-beta
+MET_VAI_REQUESTS = Counter(
+    "odin_vai_requests_total",
+    "VAI agent verification requests",
+    ["agent_id", "status", "path"],
+    registry=REG,
+)
+
+# SBOM header metrics for 0.9.0-beta
+MET_SBOM_HEADERS = Counter(
+    "odin_sbom_headers_total",
+    "SBOM headers processed",
+    ["type"],  # model, tool, prompt_cid
+    registry=REG,
+)
+
 __all__ = [
     "REG",
     "REQS",
@@ -133,6 +149,8 @@ __all__ = [
     "MET_DYNAMIC_RELOAD",
     "MET_TENANT_QUOTA_CONSUMED",
     "MET_TENANT_QUOTA_BLOCKED",
+    "MET_VAI_REQUESTS",
+    "MET_SBOM_HEADERS",
 ]
 
 # --- Aliases for ergonomic imports ---
@@ -152,6 +170,12 @@ tenant_request_latency_seconds = TENANT_LAT
 tenant_quota_consumed_total = MET_TENANT_QUOTA_CONSUMED
 tenant_quota_blocked_total = MET_TENANT_QUOTA_BLOCKED
 
+# VAI metrics aliases
+vai_requests_total = MET_VAI_REQUESTS
+
+# SBOM metrics aliases  
+sbom_headers_total = MET_SBOM_HEADERS
+
 # Include aliases in exports
 __all__ += [
     "transform_receipts_total",
@@ -168,4 +192,6 @@ __all__ += [
     "tenant_request_latency_seconds",
     "tenant_quota_consumed_total",
     "tenant_quota_blocked_total",
+    "vai_requests_total",
+    "sbom_headers_total",
 ]

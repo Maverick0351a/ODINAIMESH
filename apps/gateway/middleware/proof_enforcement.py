@@ -19,6 +19,10 @@ from libs.odin_core.odin.hel_policy import evaluate_policy
 from apps.gateway.runtime import get_hel_policy
 import logging
 from apps.gateway.metrics import policy_violations_total as MET_POLICY_VIOLATIONS
+# 0.9.0-beta: OpenTelemetry integration for security events
+from libs.odin_core.odin.telemetry_bridge import emit_security_telemetry
+# 0.9.0-beta: SIEM/SOAR integration
+from libs.odin_core.odin.siem_integration import emit_policy_violation_alert
 
 logger = logging.getLogger(__name__)
 
@@ -187,6 +191,20 @@ class ProofEnforcementMiddleware(BaseHTTPMiddleware):
         if not self.policy.kid_allowed(kid):
             try:
                 MET_POLICY_VIOLATIONS.labels(rule=ERR_POLICY_BLOCKED, route=request.url.path).inc()
+                
+                # 0.9.0-beta: Emit security telemetry for policy violations
+                violation = {
+                    "rule": ERR_POLICY_BLOCKED,
+                    "message": "kid blocked by policy",
+                    "kid": kid
+                }
+                request_context = {
+                    "tenant_id": getattr(request.state, "tenant_id", "unknown"),
+                    "route": request.url.path,
+                    "path": request.url.path,
+                    "method": request.method
+                }
+                emit_security_telemetry(violation, request_context)
             except Exception as e:
                 logger.debug("policy metric inc failed: %s", e)
             return self._err(
@@ -233,6 +251,27 @@ class ProofEnforcementMiddleware(BaseHTTPMiddleware):
                 try:
                     for v in violations_list:
                         MET_POLICY_VIOLATIONS.labels(rule=v.get("code", "unknown"), route=route).inc()
+                        
+                        # 0.9.0-beta: Emit security telemetry for HEL policy violations
+                        violation = {
+                            "rule": v.get("code", "unknown"),
+                            "message": v.get("message", "HEL policy violation"),
+                            "policy_details": v
+                        }
+                        request_context = {
+                            "tenant_id": getattr(request.state, "tenant_id", "unknown"),
+                            "route": route,
+                            "path": route,
+                            "method": request.method,
+                            "client_ip": request.client.host if hasattr(request, "client") else None
+                        }
+                        emit_security_telemetry(violation, request_context)
+                        
+                        # 0.9.0-beta: Emit SIEM/SOAR alert for high-severity violations
+                        try:
+                            await emit_policy_violation_alert(violation, request_context)
+                        except Exception as siem_error:
+                            logger.debug(f"SIEM alert failed: {siem_error}")
                 except Exception as e:
                     logger.debug("policy metric inc failed: %s", e)
                 # Structured log for logs-based metrics and alerting

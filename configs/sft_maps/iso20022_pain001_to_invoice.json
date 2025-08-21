@@ -1,0 +1,84 @@
+{
+  "from_sft": "iso20022_pain001@v1",
+  "to_sft": "invoice@v1",
+  "description": "Convert ISO20022 Payment Initiation to Invoice format (subset mapping)",
+  "bidirectional": true,
+  "fields": {
+    "MsgId": "invoice_id",
+    "CreDtTm": "date",
+    "PmtInf/PmtInfId": "reference_number",
+    "PmtInf/ReqdExctnDt": "due_date",
+    "PmtInf/Dbtr/Nm": "customer/name",
+    "PmtInf/Dbtr/PstlAdr/AdrLine/0": "customer/address/street",
+    "PmtInf/Dbtr/PstlAdr/Ctry": "customer/address/country",
+    "PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/#text": "total/amount",
+    "PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/@Ccy": "currency",
+    "PmtInf/CdtTrfTxInf/0/Cdtr/Nm": "vendor/name",
+    "PmtInf/CdtTrfTxInf/0/PmtId/InstrId": "transaction_id",
+    "PmtInf/CdtTrfTxInf/0/PmtId/EndToEndId": "end_to_end_id"
+  },
+  "intents": {
+    "payment_initiation": "invoice_payment",
+    "credit_transfer": "invoice_settlement"
+  },
+  "const": {
+    "type": "invoice",
+    "status": "pending_payment"
+  },
+  "defaults": {
+    "payment_method": "bank_transfer",
+    "invoice_type": "standard"
+  },
+  "enum_constraints": {
+    "currency": ["USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF"],
+    "status": ["draft", "pending_payment", "paid", "cancelled"],
+    "payment_method": ["bank_transfer", "credit_card", "check", "cash"]
+  },
+  "required_fields": ["invoice_id", "date", "customer", "total", "currency"],
+  "transformation_functions": {
+    "total/amount": {
+      "function": "money_round",
+      "args": ["PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/#text", "PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/@Ccy"]
+    }
+  },
+  "lossy_fields": [
+    "PmtInf/DbtrAcct",
+    "PmtInf/DbtrAgt", 
+    "PmtInf/CdtTrfTxInf/0/CdtrAcct",
+    "NbOfTxs",
+    "CtrlSum"
+  ],
+  "derived_fields": [
+    "type",
+    "status", 
+    "payment_method",
+    "invoice_type"
+  ],
+  "reverse_map": {
+    "from_sft": "invoice@v1",
+    "to_sft": "iso20022_pain001@v1",
+    "fields": {
+      "invoice_id": "MsgId",
+      "date": "CreDtTm", 
+      "reference_number": "PmtInf/PmtInfId",
+      "due_date": "PmtInf/ReqdExctnDt",
+      "customer/name": "PmtInf/Dbtr/Nm",
+      "customer/address/street": "PmtInf/Dbtr/PstlAdr/AdrLine/0",
+      "customer/address/country": "PmtInf/Dbtr/PstlAdr/Ctry",
+      "total/amount": "PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/#text",
+      "currency": "PmtInf/CdtTrfTxInf/0/Amt/InstdAmt/@Ccy",
+      "vendor/name": "PmtInf/CdtTrfTxInf/0/Cdtr/Nm",
+      "transaction_id": "PmtInf/CdtTrfTxInf/0/PmtId/InstrId",
+      "end_to_end_id": "PmtInf/CdtTrfTxInf/0/PmtId/EndToEndId"
+    },
+    "const": {
+      "PmtInf/PmtMtd": "TRF",
+      "NbOfTxs": "1"
+    },
+    "defaults": {
+      "PmtInf/DbtrAcct/Id/IBAN": "US0000000000000000000000",
+      "PmtInf/DbtrAgt/FinInstnId/BIC": "CHASUS33XXX"
+    }
+  },
+  "canon_alg": "json/nfc/no_ws/sort_keys"
+}

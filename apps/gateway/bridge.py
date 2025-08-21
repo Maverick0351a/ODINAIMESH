@@ -14,6 +14,10 @@ from libs.odin_core.odin.translate import (
     translate as apply_translation,
     load_map_from_path,
     resolve_map_path,
+    translate_with_headers,
+    extract_sft_headers,
+    TranslationReceipt,
+    EnhancedSftMap
 )
 from libs.odin_core.odin.transform import build_transform_subject, sign_transform_receipt
 from libs.odin_core.odin.storage import create_storage_from_env, key_transform_receipt, cache_transform_receipt_set, receipt_metadata_from_env
@@ -31,6 +35,8 @@ from apps.gateway.metrics import (
     bridge_beta_latency_seconds,
     transform_receipts_total,
 )
+# 0.9.0-beta: OpenTelemetry integration
+from libs.odin_core.odin.telemetry_bridge import emit_hop_telemetry, TraceContext
 import time
 from libs.odin_core.odin import apply_redactions
 import logging
@@ -196,8 +202,39 @@ async def bridge_endpoint(request: Request, response: Response) -> Dict[str, Any
             raise HTTPException(status_code=403, detail=f"No bridge contract found from realm '{source_realm}' to '{target_realm}'")
 
     try:
-        sft_map = _load_sft_map(maps_dir, from_sft, to_sft, map_inline)
-        translated = apply_translation(payload, sft_map)
+        # Check for SFT type headers (Quick Win 5)
+        sft_headers = extract_sft_headers(dict(request.headers))
+        if sft_headers.get("input_type") and sft_headers.get("desired_type"):
+            # Use header-based translation with receipt
+            translated, receipt = translate_with_headers(payload, dict(request.headers), maps_dir)
+            translation_receipt = receipt
+        else:
+            # Traditional map-based translation
+            sft_map = _load_sft_map(maps_dir, from_sft, to_sft, map_inline)
+            
+            # Try to load as enhanced map for additional features
+            try:
+                if isinstance(sft_map, SftMap):
+                    # Convert to enhanced map if config supports it
+                    enhanced_map = EnhancedSftMap(
+                        from_sft=sft_map.from_sft,
+                        to_sft=sft_map.to_sft,
+                        intents=sft_map.intents,
+                        fields=sft_map.fields,
+                        const=sft_map.const,
+                        drop=sft_map.drop
+                    )
+                else:
+                    enhanced_map = sft_map
+                
+                # Generate receipt for enhanced translation tracking
+                translated, translation_receipt = apply_translation(
+                    payload, enhanced_map, generate_receipt=True
+                )
+            except Exception:
+                # Fallback to basic translation without receipt
+                translated = apply_translation(payload, sft_map)
+                translation_receipt = None
     except TranslateError as te:
         status = 404 if te.code.endswith("map_not_found") else 422
         raise HTTPException(status_code=status, detail={"error": te.code, "message": te.message, "violations": te.violations})
@@ -274,7 +311,27 @@ async def bridge_endpoint(request: Request, response: Response) -> Dict[str, Any
     except Exception:
         pass
 
-    result = {"payload": translated, "sft": {"from": sft_map.from_sft, "to": sft_map.to_sft}}
+    # Construct response with enhanced translation receipt when available
+    result = {"payload": translated}
+    
+    # Add SFT mapping information
+    if 'sft_map' in locals():
+        result["sft"] = {"from": sft_map.from_sft, "to": sft_map.to_sft}
+    elif 'enhanced_map' in locals():
+        result["sft"] = {"from": enhanced_map.from_sft, "to": enhanced_map.to_sft}
+    
+    # Add translation receipt if available (Quick Win 2: Field-level provenance)
+    if 'translation_receipt' in locals() and translation_receipt:
+        result["translation_receipt"] = translation_receipt.to_dict()
+        
+        # Add canonicalization info to headers
+        response_headers = {
+            "X-ODIN-SFT-Canon-CID-Input": translation_receipt.input_cid,
+            "X-ODIN-SFT-Canon-CID-Output": translation_receipt.output_cid,
+            "X-ODIN-SFT-Canon-Algorithm": translation_receipt.canon_alg,
+            "X-ODIN-SFT-Coverage-Percent": str(translation_receipt.coverage_percent),
+            "X-ODIN-SFT-Transform-Count": str(translation_receipt.transformation_count)
+        }
     try:
         storage = create_storage_from_env()
         tr_key = key_transform_receipt(build_transform_subject(
@@ -319,6 +376,11 @@ async def bridge_endpoint(request: Request, response: Response) -> Dict[str, Any
             hop_headers["X-ODIN-Hop-Id"] = hop_id
         except Exception:
             hop_headers = {"X-ODIN-Hop-Id": "bridge"}
+        
+        # Add translation receipt headers if available
+        if 'response_headers' in locals():
+            hop_headers.update(response_headers)
+            
         return JSONResponse(content=result, headers=hop_headers)
     
     if not allowlist:
@@ -653,8 +715,21 @@ async def bridge_openai(request: Request, response: Response, _sig=Depends(requi
                             time.sleep(backoff_ms / 1000.0)
         finally:
             try:
-                bridge_beta_latency_seconds.labels(outcome=outcome).observe(time.perf_counter() - start_beta)
+                hop_latency = time.perf_counter() - start_beta
+                bridge_beta_latency_seconds.labels(outcome=outcome).observe(hop_latency)
                 bridge_beta_requests_total.labels(outcome=outcome).inc()
+                
+                # 0.9.0-beta: Emit hop telemetry for OpenTelemetry observability
+                if outcome == "ok" and agent_reply:
+                    trace_context = TraceContext.from_headers(dict(request.headers))
+                    hop_receipt = {
+                        "stage": "bridge.beta",
+                        "route": f"bridge/{target}",
+                        "tenant_id": getattr(request.state, "tenant_id", "unknown"),
+                        "latency_seconds": hop_latency,
+                        "outcome": outcome
+                    }
+                    emit_hop_telemetry(hop_receipt, "gateway", target, hop_latency)
             except Exception:
                 pass
         if outcome != "ok":

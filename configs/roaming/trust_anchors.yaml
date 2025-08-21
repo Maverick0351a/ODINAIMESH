@@ -1,0 +1,22 @@
+version: 1
+issuers:
+  - name: "odin-home-business"
+    iss: "https://home-gw.example.com"
+    discovery: "https://home-gw.example.com/.well-known/odin/discovery.json"
+    realms_allowed: ["business"]
+    audience_allowed: ["https://banking-gw.example.com"]
+    max_ttl_seconds: 600
+  
+  - name: "odin-home-fintech"
+    iss: "https://fintech-gw.example.com"
+    discovery: "https://fintech-gw.example.com/.well-known/odin/discovery.json"
+    realms_allowed: ["fintech", "payments"]
+    audience_allowed: ["https://banking-gw.example.com", "https://retail-gw.example.com"]
+    max_ttl_seconds: 300
+  
+  - name: "odin-home-retail"
+    iss: "https://retail-gw.example.com"
+    discovery: "https://retail-gw.example.com/.well-known/odin/discovery.json"
+    realms_allowed: ["retail", "ecommerce"]
+    audience_allowed: ["https://banking-gw.example.com", "https://payments-gw.example.com"]
+    max_ttl_seconds: 900

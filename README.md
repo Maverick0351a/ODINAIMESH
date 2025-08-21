@@ -4,6 +4,7 @@
 
 ![ODIN Protocol](https://img.shields.io/badge/ODIN-Protocol-blue?style=for-the-badge)
 ![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
+![Beta](https://img.shields.io/badge/0.9.0--beta-features-orange?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)
 ![Build](https://img.shields.io/badge/build-pass## 📄 License
 
@@ -122,6 +123,26 @@ ODIN Protocol Implementation
 </td>
 </tr>
 </table>
+
+## 🧪 0.9.0-beta Features
+
+**Verifiable Agent Identity (VAI) System:**
+- Agent registration and approval workflow
+- X-ODIN-Agent header validation middleware  
+- Firestore-backed agent registry with admin APIs
+- Route-specific agent enforcement
+
+**Software Bill of Materials (SBOM):**
+- X-ODIN-Model, X-ODIN-Tool, X-ODIN-Prompt-CID header processing
+- Automatic receipt enhancement with SBOM metadata
+- Compliance tracking for AI model usage
+
+**Merkle-Stream Receipts (Optional):**
+- `/v1/mesh/stream` endpoint for streaming data
+- Merkle root calculation for stream verification
+- Real-time receipt generation with cryptographic proofs
+
+> 📖 See [0.9.0-beta Configuration Guide](./docs/0_9_0_BETA_CONFIG.md) for setup instructions
 
 ## 🏗️ Complete Implementation
 

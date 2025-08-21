@@ -55,6 +55,10 @@ from apps.gateway.relay_mesh import mesh_router
 from apps.gateway.middleware.http_sign_enforcement import HttpSignEnforcementMiddleware
 from apps.gateway.middleware.tenant import TenantMiddleware
 from apps.gateway.middleware.quota import TenantQuotaMiddleware
+# 0.9.0-beta features
+from apps.gateway.middleware.vai import VAIMiddleware
+from apps.gateway.admin_vai import vai_admin_router
+from apps.gateway.streaming import stream_router
 from billing.routes import router as billing_router
 from billing.webhooks import router as stripe_webhook_router
 from apps.gateway.pack_loader import realm_pack_loader
@@ -158,6 +162,8 @@ _maybe_init_tracing()
 app.add_middleware(TenantMiddleware)
 # Enforce per-tenant monthly quotas if configured
 app.add_middleware(TenantQuotaMiddleware)
+# VAI (Verifiable Agent Identity) middleware for 0.9.0-beta
+app.add_middleware(VAIMiddleware)
 # Enable enforcement only when ODIN_ENFORCE_ROUTES is set to non-empty
 if (os.getenv("ODIN_ENFORCE_ROUTES", "").strip()):
     app.add_middleware(ProofEnforcementMiddleware)
@@ -186,6 +192,11 @@ app.include_router(registry_router)
 app.include_router(admin_router.router)
 app.include_router(admin_dynamic_router)
 app.include_router(mesh_router)
+# 0.9.0-beta: VAI admin endpoints
+app.include_router(vai_admin_router)
+# 0.9.0-beta: Optional streaming endpoints
+if os.getenv("ODIN_STREAMING_ENABLED", "0") != "0":
+    app.include_router(stream_router)
 app.include_router(billing_router)
 app.include_router(stripe_webhook_router)
 if hop_index_router is not None:

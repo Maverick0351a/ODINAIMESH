@@ -1,0 +1,35 @@
+{
+  "from_sft": "odin.agent_request@v1",
+  "to_sft": "openai.tool_call@v1",
+  "fields": {
+    "agent_id": "tool_id",
+    "query": "prompt",
+    "context": "system_message"
+  },
+  "intents": {
+    "agent.query": "tool.call",
+    "agent.execute": "tool.execute"
+  },
+  "const": {
+    "model": "gpt-4",
+    "api_version": "2024-12-01"
+  },
+  "drop": [
+    "internal_metadata",
+    "debug_flags"
+  ],
+  "defaults": {
+    "temperature": 0.7,
+    "max_tokens": 1000,
+    "stream": false
+  },
+  "enum_constraints": {
+    "model": ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"],
+    "intent": ["tool.call", "tool.execute"]
+  },
+  "required_fields": [
+    "tool_id",
+    "prompt"
+  ],
+  "canon_alg": "json/nfc/no_ws/sort_keys"
+}

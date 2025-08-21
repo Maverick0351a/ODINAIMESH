@@ -17,6 +17,12 @@ from libs.odin_core.odin.constants import WELL_KNOWN_ODIN_JWKS_PATH
 from libs.odin_core.odin.jwks import KeyRegistry
 from cryptography.hazmat.primitives import serialization
 from libs.odin_core.odin.envelope import ProofEnvelope
+# 0.9.0-beta: SBOM support
+from libs.odin_core.odin.sbom import extract_sbom_from_request, enhance_receipt_with_sbom, record_sbom_metrics
+# 0.9.0-beta: OpenTelemetry integration
+from libs.odin_core.odin.telemetry_bridge import emit_receipt_telemetry, TraceContext
+# 0.9.0-beta: Per-hop metering and billing
+from libs.odin_core.odin.metering import create_operation_billing, enhance_receipt_with_marketplace_billing, auto_report_stripe_usage
 
 
 router = APIRouter()
@@ -75,7 +81,7 @@ def _build_inline_jwks() -> Dict[str, Any]:
 
 
 @router.post("/v1/envelope", tags=["envelope"])
-def make_envelope(payload: Dict[str, Any], request: Request, response: Response):
+async def make_envelope(payload: Dict[str, Any], request: Request, response: Response):
     sft = get_default_sft()
     oml_c = to_oml_c(payload, sft=sft)
     cid = compute_cid(oml_c)
@@ -97,18 +103,53 @@ def make_envelope(payload: Dict[str, Any], request: Request, response: Response)
         oml_c_b64=oml_c_b64u,
     )
 
+    # 0.9.0-beta: Extract and process SBOM headers
+    sbom_info = extract_sbom_from_request(request)
+    record_sbom_metrics(sbom_info)
+
+    # Build base receipt
+    receipt = {"payload": payload, "proof": json.loads(env.to_json())}
+    
+    # 0.9.0-beta: Enhance with SBOM if present
+    receipt = enhance_receipt_with_sbom(receipt, sbom_info)
+
+    # 0.9.0-beta: Add per-hop metering and billing
+    metering_unit = create_operation_billing("envelope", payload, receipt, sbom_info)
+    tenant_id = getattr(request.state, "tenant_id", "default")
+    realm_id = getattr(request.state, "realm_id", tenant_id)
+    receipt = enhance_receipt_with_marketplace_billing(receipt, metering_unit, realm_id)
+
+    # 0.9.0-beta: Extract trace context and emit telemetry
+    trace_context = TraceContext.from_headers(dict(request.headers))
+    trace_id = emit_receipt_telemetry(
+        receipt, 
+        operation="envelope", 
+        trace_context=trace_context
+    )
+
+    # 0.9.0-beta: Auto-report usage to Stripe (async)
+    try:
+        await auto_report_stripe_usage(receipt, tenant_id)
+    except Exception as e:
+        # Don't fail the request if billing fails
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to report usage: {e}")
+
     # Surface mesh/trace headers if present (shim behavior for tools that expect them)
-    trace_id = request.headers.get("X-ODIN-Trace-Id") or None
+    original_trace_id = request.headers.get("X-ODIN-Trace-Id") or trace_id
     hop_id = request.headers.get("X-ODIN-Hop-Id") or None
     fwd = request.headers.get("X-ODIN-Forwarded-By") or None
     try:
-        if trace_id:
-            response.headers["X-ODIN-Trace-Id"] = trace_id
+        if original_trace_id:
+            response.headers["X-ODIN-Trace-Id"] = original_trace_id
         if hop_id:
             response.headers["X-ODIN-Hop-Id"] = hop_id
         if fwd:
             response.headers["X-ODIN-Forwarded-By"] = fwd
+        # Add OpenTelemetry trace ID for external correlation
+        if trace_id:
+            response.headers["X-ODIN-Otel-Trace-Id"] = trace_id
     except Exception:
         pass
 
-    return {"payload": payload, "proof": json.loads(env.to_json())}
+    return receipt

@@ -1,4 +1,4 @@
-# ODIN Protocol - Enterprise AI Intranet
+# ODIN Protocol - Enterprise AI Communication Network
 
 <div align="center">
 
@@ -6,11 +6,9 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-green?style=for-the-badge)
 ![Beta](https://img.shields.io/badge/0.9.0--beta-features-orange?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)
-![Build](https://img.shields.io/badge/build-pass## 📄 License
+![Build](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.-brightgreen?style=for-the-badge)
-
-**🚀 Production-Ready AI Intranet with 53+ Endpoints | Bridge Networking | OpenAI Compatible**
+**🚀 Production-Ready AI Communication Network | Enterprise Security | OpenAI Compatible**
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [API Reference](#-api-reference)
 
@@ -20,22 +18,22 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICE
 
 ## 🎯 What is ODIN?
 
-ODIN (Open Decentralized Intelligence Network) is a **production-grade AI intranet** that enables secure, authenticated communication between AI agents across organizational boundaries. Every message is cryptographically signed, typed, and auditable.
+ODIN (Open Decentralized Intelligence Network) is a **production-grade AI communication network** that enables secure, authenticated interaction between AI agents across organizational boundaries. Every message is cryptographically signed, typed, and auditable with complete proof validation.
 
 ### 🏆 Why Choose ODIN?
 
-- ✅ **53 Production Endpoints** - Complete service mesh with bridge networking
+- ✅ **114 Production Endpoints** - Complete service mesh with enterprise features
 - ✅ **OpenAI Compatible** - Drop-in replacement with enhanced security  
 - ✅ **Enterprise Security** - HTTP signatures, proof envelopes, policy enforcement
-- ✅ **Cloud Native** - Google Cloud Marketplace ready, Kubernetes & Cloud Run
-- ✅ **Multi-Tenant** - Built-in tenant isolation and quota management
+- ✅ **Cloud Native** - Google Cloud ready, Kubernetes & Cloud Run optimized
+- ✅ **Strategic Business Features** - RTN transparency, Federation settlement, Payment processing
 
-A production-ready implementation of the ODIN Protocol - an **Open Decentralized Intelligence Network** enabling secure, authenticated communication between AI agents across organizational boundaries with full proof-of-work validation and transform receipt capabilities.
+A production-ready implementation of the ODIN Protocol enabling secure, authenticated communication between AI agents across organizational boundaries with full proof-of-work validation and transform receipt capabilities.
 
 ## 🚀 Quick Demo
 
 ```bash
-# Start ODIN Gateway
+# Start ODIN Gateway (114 endpoints)
 python -m apps.gateway.api
 
 # Send a message with proof verification
@@ -47,19 +45,63 @@ curl -X POST http://localhost:8080/v1/envelope \
 curl -X POST http://localhost:8080/bridge/partner-realm \
   -H "Content-Type: application/json" \
   -d '{"message": "Cross-realm communication"}'
+
+# Access strategic business features
+curl -X GET http://localhost:8080/rtn/receipts     # RTN transparency
+curl -X GET http://localhost:8080/federation/status  # Settlement network
+curl -X POST http://localhost:8080/payments/bridge  # Payment processing
 ```
+
+## 🔥 Strategic Business Features
+
+<table>
+<tr>
+<td width="33%">
+
+### 🧾 **RTN - Receipts Transparency Network**
+- **9 API endpoints** for receipt verification
+- **Blockchain transparency** for transaction audit
+- **Real-time verification** of business receipts  
+- **Compliance tracking** for regulatory requirements
+- **Multi-format support** (PDF, JSON, XML)
+
+</td>
+<td width="33%">
+
+### 🌐 **Federation & Settlement** 
+- **11 API endpoints** for cross-network settlement
+- **Multi-party reconciliation** across organizations
+- **Automated settlement** with proof validation
+- **Real-time balance tracking** and reporting
+- **Enterprise integration** with existing systems
+
+</td>
+<td width="33%">
+
+### 💳 **Payments Bridge Pro**
+- **8 API endpoints** for payment processing
+- **ISO 20022 compliance** for banking integration
+- **ACH NACHA processing** with batch management  
+- **SFTP connectivity** for secure file transfer
+- **Enterprise payment workflows** with audit trails
+
+</td>
+</tr>
+</table>
 
 ## 📋 Repository Structure
 
 ```
 ODIN Protocol Implementation
 ├── 🏗️ Core Services
-│   ├── apps/gateway/          # Main FastAPI gateway (53 endpoints)
+│   ├── apps/gateway/          # Main FastAPI gateway (114 endpoints)
 │   ├── apps/agent_beta/       # OpenAI-compatible proxy
 │   └── services/relay/        # Secure HTTP forwarder
-├── 📚 Libraries  
-│   ├── libs/odin_core/        # Protocol implementation (OML-C, OPE, JWKS)
-│   └── gateway/               # Gateway utilities and constants
+├── 📚 Strategic Business Libraries  
+│   ├── libs/odin_core/odin/rtn/              # RTN transparency (9 endpoints)
+│   ├── libs/odin_core/odin/federation/       # Settlement network (11 endpoints)
+│   ├── libs/odin_core/odin/payments_bridge_pro/  # Payment processing (8 endpoints)
+│   └── libs/odin_core/        # Protocol implementation (OML-C, OPE, JWKS)
 ├── 🔧 SDKs & Tools
 │   ├── packages/sdk/          # TypeScript/JavaScript SDK
 │   ├── packages/langchain-odin-tools/  # LangChain integrations
@@ -83,7 +125,8 @@ ODIN Protocol Implementation
 <td width="50%">
 
 ### 🌐 **Gateway Service**
-- **53 Active Endpoints** for complete service mesh
+- **114 Active Endpoints** for complete enterprise service mesh
+- **Strategic Business APIs** - RTN, Federation, Payments integration
 - **Bridge & Mesh Networking** for cross-realm communication  
 - **Service Registry** for AI agent discovery
 - **Transform Receipts** for message audit trails
@@ -97,6 +140,7 @@ ODIN Protocol Implementation
 - **HTTP Signature Enforcement** for authentication
 - **Prometheus Metrics** for observability
 - **Security Middleware** stack
+- **Enhanced HEL Middleware** with 9-layer security
 
 </td>
 </tr>
@@ -109,6 +153,7 @@ ODIN Protocol Implementation
 - **Policy Enforcement Engine** 
 - **Response Signing** for verification
 - **Multi-tenant Isolation**
+- **Carrier-grade security** architecture
 
 </td>
 <td>
@@ -119,6 +164,7 @@ ODIN Protocol Implementation
 - **Health Checks** and diagnostics
 - **Auto-scaling** Cloud Run deployment
 - **Marketplace Integration**
+- **Business process automation**
 
 </td>
 </tr>
@@ -148,24 +194,31 @@ ODIN Protocol Implementation
 
 This repository contains a comprehensive ODIN Protocol implementation with:
 
-- **53 Active Gateway Endpoints** - Complete FastAPI service mesh
+- **114 Active Gateway Endpoints** - Complete FastAPI service mesh with strategic business features
 - **Agent Beta Service** - OpenAI-compatible proxy with HTTP signature enforcement
+- **Strategic Business APIs** - RTN transparency (9 endpoints), Federation settlement (11 endpoints), Payment processing (8 endpoints)
 - **Bridge Functionality** - Cross-realm mesh communication with hop forwarding
 - **Marketplace Integration** - Google Cloud Marketplace ready deployment
 - **Production Observability** - Prometheus metrics, structured logging, distributed tracing
+- **Enhanced Security** - Carrier-grade security with 9-layer HEL middleware
 
 ## 🚀 Core Services
 
 ### Gateway Service (`apps/gateway/`)
-Complete FastAPI application with 53 endpoints including:
+Complete FastAPI application with 114 endpoints including:
 
+**Strategic Business APIs:**
+- **RTN (Receipts Transparency Network)** (`/rtn/*`) - 9 endpoints for receipt verification and blockchain transparency
+- **Federation & Settlement** (`/federation/*`) - 11 endpoints for cross-network settlement and reconciliation  
+- **Payments Bridge Pro** (`/payments/*`) - 8 endpoints for ISO 20022 and ACH NACHA payment processing
+
+**Core Infrastructure:**
 - **Bridge & Mesh** (`/bridge/*`, `/mesh/*`) - Cross-realm communication
 - **Service Registry** (`/registry/*`) - Agent capability discovery  
 - **Transform Receipts** (`/receipts/*`, `/transform/*`) - Message transformation tracking
 - **Proof Management** (`/proof/*`, `/envelope/*`) - OPE validation and storage
 - **Admin APIs** (`/admin/*`) - Runtime configuration and health
 - **SFT Translation** (`/sft/*`) - Semantic format transformation
-- **Billing Integration** (`/billing/*`) - Usage tracking and Stripe integration
 
 ### Agent Beta Service (`apps/agent_beta/`)
 OpenAI-compatible service with:
@@ -179,6 +232,9 @@ Production-ready protocol implementation:
 - **OML-C**: ODIN Message Layer with Content addressing
 - **OPE**: ODIN Proof Envelopes for message integrity
 - **JWKS**: JSON Web Key Set management and rotation
+- **RTN**: Receipts Transparency Network with blockchain verification
+- **Federation**: Cross-network settlement and reconciliation engine
+- **Payments Bridge Pro**: ISO 20022 and ACH NACHA payment processing
 - **Storage**: Pluggable backends (Local, GCS, Firestore)
 - **Transform**: Message transformation and receipt generation
 - **Bridge**: Mesh networking and hop forwarding
@@ -187,20 +243,27 @@ Production-ready protocol implementation:
 
 ```
 ODIN Protocol Stack
-├── Gateway (53 endpoints)
-│   ├── Bridge & Mesh Communication
-│   ├── Service Registry & Discovery  
-│   ├── Transform Receipt Management
-│   ├── Proof Envelope Validation
-│   └── Admin & Billing APIs
+├── Gateway (114 endpoints)
+│   ├── Strategic Business APIs
+│   │   ├── RTN - Receipts Transparency (9 endpoints)
+│   │   ├── Federation - Settlement Network (11 endpoints)
+│   │   └── Payments Bridge Pro (8 endpoints)
+│   ├── Core Infrastructure
+│   │   ├── Bridge & Mesh Communication
+│   │   ├── Service Registry & Discovery  
+│   │   ├── Transform Receipt Management
+│   │   ├── Proof Envelope Validation
+│   │   └── Admin & Monitoring APIs
 ├── Agent Beta (OpenAI Proxy)
 │   ├── HTTP Signature Enforcement
+│   ├── Enhanced HEL Middleware (9 layers)
 │   ├── Metrics & Observability
 │   └── Security Middleware
 ├── Core Libraries
 │   ├── OML-C Message Layer
 │   ├── OPE Proof System
 │   ├── JWKS Key Management
+│   ├── Strategic Business Services
 │   ├── Storage Abstraction
 │   └── Transform Engine
 └── Infrastructure
@@ -274,18 +337,24 @@ helm install odin-gateway helm/odin-gateway-relay/
 
 ## 📋 API Reference
 
-### Gateway Endpoints (53 total)
+### Gateway Endpoints (114 total)
 ```
 /health                    - Service health check
 /bridge/{target}          - Bridge message to target realm
 /mesh/forward             - Mesh network forwarding
+
+Strategic Business APIs:
+/rtn/receipts             - RTN receipt verification (9 endpoints)
+/federation/settlement    - Cross-network settlement (11 endpoints)  
+/payments/bridge          - Payment processing APIs (8 endpoints)
+
+Core Infrastructure:
 /registry/agents          - Agent capability registry
 /receipts/transform       - Transform receipt management
 /proof/verify             - Proof envelope validation
 /admin/reload             - Runtime configuration reload
 /sft/translate           - Semantic format transformation
-/billing/usage           - Usage tracking and billing
-... and 44 more endpoints
+... and 86 more endpoints
 ```
 
 ### Agent Beta Endpoints
@@ -380,10 +449,12 @@ ODIN_HOP_HEADERS=x-odin-hop-count,x-odin-route-id
 
 ## 📈 Performance
 
-- **Gateway Throughput** - 1000+ requests/second per instance
+- **Gateway Throughput** - 1000+ requests/second per instance across 114 endpoints
+- **Strategic Business Processing** - Sub-second RTN verification, real-time settlement, instant payment validation
 - **Proof Validation** - Sub-millisecond verification
 - **Storage Backends** - Optimized for GCS and Firestore
 - **Caching** - Intelligent caching for discovery and proofs
+- **Enterprise Scale** - Multi-tenant architecture with carrier-grade performance
 
 ## 🤝 Contributing
 
@@ -396,7 +467,7 @@ ODIN_HOP_HEADERS=x-odin-hop-count,x-odin-route-id
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.
 
 ## 🔗 Related Projects
 
@@ -406,4 +477,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Production Ready** ✅ | **Marketplace Approved** ✅ | **Enterprise Grade** ✅
+**Production Ready** ✅ | **Enterprise Grade** ✅ | **Strategic Business Features** ✅
